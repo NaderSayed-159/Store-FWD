@@ -31,3 +31,5 @@ if (NODE_ENV === 'test') {
         password: POSTGRES_PASSWORD
     })
 }
+
+export default Client;
