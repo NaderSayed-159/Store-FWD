@@ -31,3 +31,15 @@ only the route will change to  be  ' http://localhost:3000/orders'
 ## for products
 
 only the route will change to be ' http://localhost:3000/products'
+
+
+to do any update in any model
+you need to send the updates in for array of objects of each update for example to update firstName and lastName
+
+
+```javascript
+[
+{ "firstName":"Nader1"},
+{"lastName":"Sayed2"}
+]
+```
