@@ -43,7 +43,7 @@ export class UsersModel {
 
     async createUser(creationInput: User): Promise<User> {
         try {
-            const sql = 'INSERT INTO users (firstName, lastName,loginName,password) VALUES($1,$2,$3,$4) RETURNING *'
+            const sql = 'INSERT INTO users (firstName, lastName,loginname,password) VALUES($1,$2,$3,$4) RETURNING *'
             const hashedPassword = bcrypt.hashSync(
                 creationInput.password + prepper as string,
                 parseInt(saltRounds)
@@ -51,7 +51,7 @@ export class UsersModel {
             // @ts-ignore
             const conn = await Client.connect()
             const result = await conn.query(sql, [creationInput.firstName, creationInput.lastName, creationInput.loginName, hashedPassword])
-            const user = result.rows[0]
+            const user = result.rows[0];
             conn.release()
             return user
         } catch (err) {
@@ -91,7 +91,7 @@ export class UsersModel {
                 }
             }
         })
-        updateQuerey += `WHERE id=${id}`
+        updateQuerey += `WHERE id=${id}`;
         return updateQuerey;
     }
 
@@ -115,9 +115,8 @@ export class UsersModel {
 
     async deleteUser(id: string): Promise<User> {
         try {
-            const sql = 'DELETE FROM user WHERE id=($1)'
-            // @ts-ignore
             const conn = await Client.connect()
+            const sql = 'DELETE FROM users WHERE id=($1)'
             const result = await conn.query(sql, [id])
             const user = result.rows[0]
             conn.release()

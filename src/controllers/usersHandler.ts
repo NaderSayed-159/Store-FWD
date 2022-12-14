@@ -1,5 +1,5 @@
 import { UsersModel, User } from "../models/usersModel";
-import express, { NextFunction } from 'express';
+import express from 'express';
 import jwt, { Secret } from 'jsonwebtoken';
 import { premissionAccess } from "../services/middlewares";
 const userModel = new UsersModel;
@@ -31,7 +31,7 @@ const createUser = async (req: express.Request, res: express.Response) => {
     }
 
     try {
-        const newUser = userModel.createUser(createdUser);
+        const newUser = await userModel.createUser(createdUser);
         res.status(201);
         res.json(newUser);
     } catch (err) {
@@ -45,7 +45,7 @@ const updateUser = async (req: express.Request, res: express.Response) => {
     const userUpdates: [] = req.body;
     try {
         const updatedUser = await userModel.updateUser(req.params.id, userUpdates);
-
+        res.json(updatedUser)
     } catch (err) {
         res.status(400);
         res.json(err)
@@ -86,7 +86,8 @@ const userRoutes = (app: express.Application) => {
     app.get('/users', getUsers)
     app.get('/users/:id', userById)
     app.post('/users', createUser)
-    app.put('/users/:id', premissionAccess, updateUser)
+    // app.put('/users/:id', premissionAccess, updateUser)
+    app.put('/users/:id', updateUser)
     app.delete('/users/:id', deleteUser)
     app.post('/users/auth', authenticate)
 }

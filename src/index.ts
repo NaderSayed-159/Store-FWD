@@ -2,6 +2,7 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import userRoutes from './controllers/usersHandler';
 
 dotenv.config()
 
@@ -27,3 +28,5 @@ app.listen(port, () => {
     console.log(`hello from http://localhost:${port}`);
 
 })
+
+userRoutes(app);
