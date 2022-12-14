@@ -38,7 +38,7 @@ export class ProductModel {
         }
     }
 
-    async createUser(creationInput: Product): Promise<Product> {
+    async createProduct(creationInput: Product): Promise<Product> {
         try {
             const sql = 'INSERT INTO products (productname, productprice,category_id) VALUES($1,$2,$3) RETURNING *'
 
@@ -52,7 +52,7 @@ export class ProductModel {
         }
     }
 
-    async updateUser(id: String, data: []): Promise<Product> {
+    async updateProduct(id: String, data: []): Promise<Product> {
         try {
             const conn = await Client.connect();
             const sql = helpers.generteUpdateQuerey(data, 'products', id);
@@ -69,7 +69,7 @@ export class ProductModel {
 
         }
     }
-    async deleteUser(id: string): Promise<Product> {
+    async deleteProduct(id: string): Promise<Product> {
         try {
             const conn = await Client.connect()
             const sql = 'DELETE FROM products WHERE id=($1)'
