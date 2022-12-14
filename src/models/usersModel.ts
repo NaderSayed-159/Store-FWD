@@ -1,6 +1,7 @@
 import Client from "../database";
 import bcrypt from 'bcrypt';
 import dotenv from 'dotenv';
+import * as helpers from '../services/helperFunction'
 
 dotenv.config();
 
@@ -59,46 +60,11 @@ export class UsersModel {
         }
     }
 
-    private generteUpdateQuerey = (data: [], table: string, id: String) => {
-        let updateQuerey: string = `UPDATE ${table} SET `;
-        data.forEach((el, index) => {
-
-            if (data.length < 2 && data.length > 0) {
-                for (const [key, value] of Object.entries(el)) {
-                    if (typeof value == 'string') {
-                        updateQuerey += `${key}='${value}' `
-                    } else {
-                        updateQuerey += `${key}=${value} `
-                    }
-                }
-            } else if (data.length > 1) {
-                if (index != data.length - 1) {
-                    for (const [key, value] of Object.entries(el)) {
-                        if (typeof value == 'string') {
-                            updateQuerey += `${key}='${value}', `
-                        } else {
-                            updateQuerey += `${key}=${value}, `
-                        }
-                    }
-                } else {
-                    for (const [key, value] of Object.entries(el)) {
-                        if (typeof value == 'string') {
-                            updateQuerey += `${key}='${value}' `
-                        } else {
-                            updateQuerey += `${key}=${value} `
-                        }
-                    }
-                }
-            }
-        })
-        updateQuerey += `WHERE id=${id}`;
-        return updateQuerey;
-    }
 
     async updateUser(id: String, data: []): Promise<User> {
         try {
             const conn = await Client.connect();
-            const sql = this.generteUpdateQuerey(data, 'users', id);
+            const sql = helpers.generteUpdateQuerey(data, 'users', id);
             const result = await conn.query(sql);
             const user = result.rows[0];
             conn.release();

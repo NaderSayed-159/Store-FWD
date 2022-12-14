@@ -1,5 +1,7 @@
 import Client from "../database";
 import dotenv from 'dotenv';
+import * as helpers from '../services/helperFunction'
+
 
 dotenv.config();
 
@@ -7,7 +9,7 @@ export type Product = {
     id?: Number,
     productName: String,
     productPrice: Number,
-    category_id: String,
+    category_id: Number,
 }
 
 export class ProductModel {
@@ -18,12 +20,12 @@ export class ProductModel {
             const result = await con.query(sql);
             con.release();
             return result.rows;
-        }catch(err){
+        } catch (err) {
             throw new Error(`Can't Fetch Products: ${err}`)
         }
 
     }
-    
+
     async getProductsById(id: String): Promise<Product> {
         try {
             const con = await Client.connect();
@@ -50,8 +52,34 @@ export class ProductModel {
         }
     }
 
+    async updateUser(id: String, data: []): Promise<Product> {
+        try {
+            const conn = await Client.connect();
+            const sql = helpers.generteUpdateQuerey(data, 'products', id);
+            const result = await conn.query(sql);
+            const product = result.rows[0];
+            conn.release();
+            return product;
+        } catch (err) {
+            if (data.length == 0) {
+                throw new Error(`Updates can't be empty`)
+            } else {
+                throw new Error(`Could not update Product of id=${id}. Error: ${err}`)
+            }
 
-
-
+        }
+    }
+    async deleteUser(id: string): Promise<Product> {
+        try {
+            const conn = await Client.connect()
+            const sql = 'DELETE FROM products WHERE id=($1)'
+            const result = await conn.query(sql, [id])
+            const product = result.rows[0];
+            conn.release();
+            return product
+        } catch (err) {
+            throw new Error(`Could not delete product ${id}. Error: ${err}`)
+        }
+    }
 
 }
