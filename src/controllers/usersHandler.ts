@@ -1,7 +1,8 @@
 import { UsersModel, User } from "../models/usersModel";
 import express from 'express';
 import jwt, { Secret } from 'jsonwebtoken';
-import { premissionAccess } from "../services/middlewares";
+import { accessByToken } from "../middlewares/premissions";
+
 const userModel = new UsersModel;
 
 const getUsers = async (_req: express.Request, res: express.Response) => {
@@ -63,11 +64,12 @@ const deleteUser = async (req: express.Request, res: express.Response) => {
 
 const authenticate = async (req: express.Request, res: express.Response) => {
     const loginedUser = {
-        userName: req.body.userName,
+        loginName: req.body.loginName,
         password: req.body.password
     }
     try {
-        const authUser = await userModel.auth(loginedUser.userName, loginedUser.password);
+        const authUser = await userModel.auth(loginedUser.loginName, loginedUser.password);
+        console.log('authUser', authUser)
         if (authUser != null) {
             const token = jwt.sign({ user: loginedUser }, process.env.JWT_String as Secret);
             res.json(token);
@@ -83,12 +85,12 @@ const authenticate = async (req: express.Request, res: express.Response) => {
 
 
 const userRoutes = (app: express.Application) => {
-    app.get('/users', getUsers)
-    app.get('/users/:id', userById)
-    app.post('/users', createUser)
-    // app.put('/users/:id', premissionAccess, updateUser)
-    app.put('/users/:id', updateUser)
-    app.delete('/users/:id', deleteUser)
+    app.get('/users', accessByToken, getUsers)
+    app.get('/users/:id', accessByToken, userById)
+    app.post('/users', accessByToken, createUser)
+    // app.post('/users', createUser)
+    app.put('/users/:id', accessByToken, updateUser)
+    app.delete('/users/:id', accessByToken, deleteUser)
     app.post('/users/auth', authenticate)
 }
 

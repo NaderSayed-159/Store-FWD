@@ -128,7 +128,7 @@ export class UsersModel {
     
     async auth(loginName: String, inputPass: String): Promise<User | null> {
         const conn = await Client.connect();
-        const sql = 'SELECT * FROM users WHERE loginName=($1)';
+        const sql = 'SELECT * FROM users WHERE loginname=($1)';
         const result = await conn.query(sql, [loginName])
         if (result.rows.length) {
             const user = result.rows[0];
