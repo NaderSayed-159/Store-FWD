@@ -34,6 +34,8 @@ You can can call 'http://localhost:3000/users/auth' by post request with loginNa
 }
 ```
 
+after copying token form response put it in header actions that need authentications as authoriztion key and in value put "bearer Token"
+
 ## for orders
 
 only the route will change to  be  ' http://localhost:3000/orders'
