@@ -44,7 +44,7 @@ export class OrderModel {
             const sql = 'INSERT INTO orders (productsoforder, quantitiesofproducts,user_id,status) VALUES($1,$2,$3,$4) RETURNING *'
 
             const conn = await Client.connect()
-            const result = await conn.query(sql, [creationInput.productsoforder, creationInput.quantitiesofproducts, creationInput.user_id,creationInput.status])
+            const result = await conn.query(sql, [creationInput.productsoforder, creationInput.quantitiesofproducts, creationInput.user_id, creationInput.status])
             const user = result.rows[0];
             conn.release()
             return user
@@ -70,6 +70,7 @@ export class OrderModel {
 
         }
     }
+
     async deleteOrder(id: string): Promise<Order> {
         try {
             const conn = await Client.connect()
@@ -80,6 +81,19 @@ export class OrderModel {
             return order;
         } catch (err) {
             throw new Error(`Could not delete order ${id}. Error: ${err}`)
+        }
+    }
+
+    async getOrdersOfUser(userId: String): Promise<Order[]> {
+        try {
+            const con = await Client.connect();
+            const sql = 'SELECT * FROM products WHERE user_id=($1)';
+            const result = await con.query(sql, [userId]);
+            con.release();
+            return result.rows;
+        } catch (err) {
+            throw new Error(`Can't Fetch Orders of User ${userId}: ${err}`)
+
         }
     }
 

@@ -9,8 +9,8 @@ const productsModel = new ProductModel;
 
 const getProducts = async (_req: express.Request, res: express.Response) => {
     try {
-        const allUsers = await productsModel.fetchAllProducts();
-        res.json(allUsers)
+        const allProducts = await productsModel.fetchAllProducts();
+        res.json(allProducts)
     } catch (err) {
         res.json(err)
     }
@@ -18,7 +18,10 @@ const getProducts = async (_req: express.Request, res: express.Response) => {
 
 const productById = async (req: express.Request, res: express.Response) => {
     try {
-        const user = await productsModel.getProductsById(req.params.id);
+        const product = await productsModel.getProductsById(req.params.id);
+        res.json(product)
+
+    
     } catch (err) {
         res.status(400);
         res.json(err);
@@ -64,11 +67,11 @@ const deleteProduct = async (req: express.Request, res: express.Response) => {
 }
 
 const ProductsRoutes = (app: express.Application) => {
-    app.get('/users',  getProducts)
-    app.get('/users/:id', productById)
-    app.post('/users', accessByToken, createProduct)
-    app.put('/users/:id', accessByToken, updateProduct)
-    app.delete('/users/:id', accessByToken, deleteProduct)
+    app.get('/products',  getProducts)
+    app.get('/products/:id', productById)
+    app.post('/products', accessByToken, createProduct)
+    app.put('/products/:id', accessByToken, updateProduct)
+    app.delete('/products/:id', accessByToken, deleteProduct)
 }
 
 export default ProductsRoutes;

@@ -6,8 +6,8 @@
   "scripts": {
     "build": "npx tsc",
     "start": "node src/index.js",
-    "test": "set NODE_ENV=test && db-migrate --env test up && jasmine && db-migrate db:drop test",
-    "dev":"npx ts-node src/."
+    "test": "set NODE_ENV=test && db-migrate --env test up && npx tsc && jasmine && db-migrate db:drop test",
+    "dev": "npx ts-node src/."
   },
   "repository": {
     "type": "git",

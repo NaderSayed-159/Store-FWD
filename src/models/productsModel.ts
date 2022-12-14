@@ -48,7 +48,7 @@ export class ProductModel {
             conn.release()
             return user
         } catch (err) {
-            throw new Error(`Could not add new user ${creationInput.productName}. Error: ${err}`)
+            throw new Error(`Could not add new Product ${creationInput.productName}. Error: ${err}`)
         }
     }
 
