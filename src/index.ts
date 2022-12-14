@@ -3,6 +3,9 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import userRoutes from './controllers/usersHandler';
+import ProductsRoutes from './controllers/productsHandles';
+import OrdersRoutes from './controllers/oredersHandler';
+import OrdersProductsRoutes from './controllers/orderProductHandler';
 
 dotenv.config()
 
@@ -30,3 +33,6 @@ app.listen(port, () => {
 })
 
 userRoutes(app);
+ProductsRoutes(app);
+OrdersRoutes(app);
+OrdersProductsRoutes(app);

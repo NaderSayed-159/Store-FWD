@@ -30,11 +30,14 @@ const addProductToOrder = async (req: express.Request, res: express.Response) =>
 
 }
 
-const OrdersRoutes = (app: express.Application) => {
+const OrdersProductsRoutes = (app: express.Application) => {
     app.get('/orders/:id/products', getProductsOfOrder)
     app.post('/orders/products', addProductToOrder)
 
 }
+
+export default OrdersProductsRoutes;
+
 
 
 
