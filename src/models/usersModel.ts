@@ -55,7 +55,7 @@ export class UsersModel {
             conn.release()
             return user
         } catch (err) {
-            throw new Error(`Could not add new book ${creationInput.loginName}. Error: ${err}`)
+            throw new Error(`Could not add new user ${creationInput.loginName}. Error: ${err}`)
         }
     }
 
