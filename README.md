@@ -1,31 +1,49 @@
 # Store-FWD
 
-First of All You can start the project using Command
+#### Environment Variables:
 
-npm run dev
+* POSTGRES_HOST = '127.0.0.1'
+* POSTGRES_DB = 'STORE_FWD'
+* POSTGRES_USER = 'postgres'
+* POSTGRES_PASSWORD = 'Pass123$'
+* POSTGRES_TEST_DB='testDb'
+* NODE_ENV = 'dev'
+* PORT = 3000
+* BCRYPT_PASSWORD = 'Pass-X'
+* SALT_ROUNDS = 10
+* JWT_STRING='KiritoX'
 
-you need main database with name 'STORE_FWD';
+#### Database Setub
 
-after running migrations to create the tables
+1-  CREATE DATABASE STORE_FWD;
 
-you can start send requests on ' http://localhost:3000 '
+2- CREATE DATABASE testDb;
 
+> i used the default user of server "postgres"
 
-## for users
+After running migrations to create the tables
 
-first of all you just need to un comment the code line 90 to add 1st user without and comment line **91**
+**you can start the the server by command:**
 
-then you can do all request on 'http://localhost:3000/users'
+' npm run dev ';
 
-* get all users use **get** method
-* get user by id use **get** method on ' http://localhost:3000/users/userid '
-* create user by **post** method
-* update use **put** method
-* delete user by **delete** method]
+the application will run on route' http://localhost:3000 '
 
-## to get the jwt token of login
+## Users Model
 
-You can can call 'http://localhost:3000/users/auth' by post request with loginName and password
+first of all you just need to uncomment the code line 90 to add 1st user without token needed and comment line **91**
+
+then you can do all request on '**http://localhost:3000/users**'
+
+* to get all users use [ **Get** ] verb on above route
+* to get user by id use [ **Get** ] verb on  route ' http://localhost:3000/users/userid '
+* to create user by [ **POST** ] verb on above route
+* to update use [ **PUT** ] verb with mentiond JSON structure below;
+* to delete user by [ **DELETE** ] verb ' **http://localhost:3000/users/userid '**
+
+## JWT token of login
+
+You can can call 'http://localhost:3000/users/auth' by [ **POST** ] request with loginName and password
 
 ```javascript
 {
@@ -36,17 +54,29 @@ You can can call 'http://localhost:3000/users/auth' by post request with loginNa
 
 after copying token form response put it in header actions that need authentications as authoriztion key and in value put "bearer Token"
 
-## for orders
+## Orders Model
 
-only the route will change to  be  ' http://localhost:3000/orders'
+all request on '**http://localhost:3000/orders**'
 
-## for products
+* to get all users use [ **Get** ] verb on above route
+* to get user by id use [ **Get** ] verb on  route ' **http://localhost:3000/orders/userid** '
+* to create user by [ **POST** ] verb on above route
+* to update use [ **PUT** ] verb with mentiond JSON structure below;
+* to delete user by [ **DELETE** ] verb ' **http://localhost:3000/orders/orderid '**
 
-only the route will change to be ' http://localhost:3000/products'
+## Products Model
 
-## For any update in any model
+all request on '**http://localhost:3000/products**'
 
-you need to send the updates in for array of objects of each update for example to update firstName and lastName
+* to get all users use [ **Get** ] verb on above route
+* to get user by id use [ **Get** ] verb on  route ' **http://localhost:3000/products/productid** '
+* to create user by [ **POST** ] verb on above route
+* to update use [ **PUT** ] verb with mentiond JSON structure below;
+* to delete user by [ **DELETE** ] verb ' **http://localhost:3000/products/productid '**
+
+## For any update request in any model
+
+you need to send the updates in form of Array of objects for each updated value for example to update firstName and lastName in userModel
 
 ```javascript
 [

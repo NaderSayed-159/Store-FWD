@@ -1,7 +1,7 @@
 import Client from "../database";
 import bcrypt from 'bcrypt';
 import dotenv from 'dotenv';
-import * as helpers from '../services/helperFunction'
+import * as helpers from '../middlewares/helperFunction'
 
 dotenv.config();
 
