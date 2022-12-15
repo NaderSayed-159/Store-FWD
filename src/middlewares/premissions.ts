@@ -6,8 +6,9 @@ export const accessByID = (req: express.Request, res: express.Response, next: Ne
         const authorizationHeader = req.headers.authorization;
         const token = authorizationHeader?.split(' ')[1];
         const decoded = jwt.verify(token as string, process.env.JWT_STRING as string) as JwtPayload
-
-        if (decoded.user.id !== parseInt(req.params.id)) {
+        console.log(decoded.user.id);
+        console.log(parseInt(req.params.id));
+        if (decoded.user.id != parseInt(req.params.id)) {
             console.log("hello from here");
             throw new Error()
         }

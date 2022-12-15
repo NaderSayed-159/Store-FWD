@@ -1,7 +1,7 @@
 import { UsersModel, User } from "../models/usersModel";
 import express from 'express';
 import jwt, { Secret } from 'jsonwebtoken';
-import { accessByToken } from "../middlewares/premissions";
+import { accessByID, accessByToken } from "../middlewares/premissions";
 
 const userModel = new UsersModel;
 
@@ -17,6 +17,7 @@ const getUsers = async (_req: express.Request, res: express.Response) => {
 const userById = async (req: express.Request, res: express.Response) => {
     try {
         const user = await userModel.getUserById(req.params.id);
+        res.json(user)
     } catch (err) {
         res.status(400);
         res.json(err);
@@ -71,7 +72,7 @@ const authenticate = async (req: express.Request, res: express.Response) => {
         const authUser = await userModel.auth(loginedUser.loginName, loginedUser.password);
         console.log('authUser', authUser)
         if (authUser != null) {
-            const token = jwt.sign({ user: loginedUser }, process.env.JWT_String as Secret);
+            const token = jwt.sign({ user: authUser }, process.env.JWT_String as Secret);
             res.json(token);
         } else {
             res.status(401);
@@ -83,12 +84,24 @@ const authenticate = async (req: express.Request, res: express.Response) => {
     }
 }
 
+const updatePass = async (req: express.Request, res: express.Response) => {
+    try {
+        const updatedPass = await userModel.updatePassword(req.body.password, req.params.id)
+        res.json('Password Upated')
+    } catch (err) {
+        res.status(400)
+        res.json(err)
+    }
+}
+
+
 
 const userRoutes = (app: express.Application) => {
     app.get('/users', accessByToken, getUsers)
     app.get('/users/:id', accessByToken, userById)
     // app.post('/users', createUser)
     app.post('/users', accessByToken, createUser)
+    app.put('/users/:id/password', accessByID, updatePass)
     app.put('/users/:id', accessByToken, updateUser)
     app.delete('/users/:id', accessByToken, deleteUser)
     app.post('/users/auth', authenticate)

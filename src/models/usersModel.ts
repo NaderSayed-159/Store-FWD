@@ -14,7 +14,7 @@ export type User = {
     firstName: String,
     lastName: String,
     loginName: String,
-    password: String
+    password: string
 }
 
 export class UsersModel {
@@ -44,12 +44,9 @@ export class UsersModel {
 
     async createUser(creationInput: User): Promise<User> {
         try {
-            const sql = 'INSERT INTO users (firstName, lastName,loginname,password) VALUES($1,$2,$3,$4) RETURNING *'
-            const hashedPassword = bcrypt.hashSync(
-                creationInput.password + prepper as string,
-                parseInt(saltRounds)
-            )
-            // @ts-ignore
+            const sql = 'INSERT INTO users (firstname, lastname,loginname,password) VALUES($1,$2,$3,$4) RETURNING *'
+            const hashedPassword = helpers.hashingPass(creationInput.password)
+
             const conn = await Client.connect()
             const result = await conn.query(sql, [creationInput.firstName, creationInput.lastName, creationInput.loginName, hashedPassword])
             const user = result.rows[0];
@@ -59,7 +56,6 @@ export class UsersModel {
             throw new Error(`Could not add new user ${creationInput.loginName}. Error: ${err}`)
         }
     }
-
 
     async updateUser(id: String, data: []): Promise<User> {
         try {
@@ -91,7 +87,7 @@ export class UsersModel {
             throw new Error(`Could not delete user ${id}. Error: ${err}`)
         }
     }
-    
+
     async auth(loginName: String, inputPass: String): Promise<User | null> {
         const conn = await Client.connect();
         const sql = 'SELECT * FROM users WHERE loginname=($1)';
@@ -103,6 +99,21 @@ export class UsersModel {
             }
         }
         return null;
+    }
+
+    async updatePassword(password: string, id: string): Promise<void> {
+        const hashedPassword = helpers.hashingPass(password)
+
+        try {
+            const conn = await Client.connect();
+            const sql = 'UPDATE users SET password=($1) where id=($2)';
+            const result = await conn.query(sql, [hashedPassword, id])
+            const user = result.rows[0];
+            conn.release();
+            return user;
+        } catch (err) {
+            throw new Error(`Can't update password Error: ${err}`)
+        }
     }
 
 }
