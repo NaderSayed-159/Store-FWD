@@ -1,5 +1,9 @@
 import express, { NextFunction } from 'express';
 import jwt, { JwtPayload } from 'jsonwebtoken';
+import { UsersModel } from '../models/usersModel';
+import { json } from 'body-parser';
+
+const usersModel = new UsersModel;
 
 export const accessByID = (req: express.Request, res: express.Response, next: NextFunction) => {
     try {
@@ -21,11 +25,15 @@ export const accessByID = (req: express.Request, res: express.Response, next: Ne
     next();
 }
 
-export const accessByToken = (req: express.Request, res: express.Response, next: NextFunction) => {
+export const accessByToken = async (req: express.Request, res: express.Response, next: NextFunction) => {
     try {
-        const authorizationHeader = req.headers.authorization;
-        const token = authorizationHeader?.split(' ')[1];
-        jwt.verify(token as string, process.env.JWT_STRING as string) as JwtPayload
+        const usersNumber = await usersModel.fetchAllUsers();
+        console.log(usersNumber.length);
+        if (usersNumber.length > 0) {
+            const authorizationHeader = req.headers.authorization;
+            const token = authorizationHeader?.split(' ')[1];
+            jwt.verify(token as string, process.env.JWT_STRING as string) as JwtPayload
+        }
     } catch (err) {
         res.status(401)
         res.json('Access denied, invalid token')

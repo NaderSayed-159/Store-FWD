@@ -58,6 +58,7 @@ export class UsersModel {
     }
 
     async updateUser(id: String, data: []): Promise<User> {
+
         try {
             const conn = await Client.connect();
             const sql = helpers.generteUpdateQuerey(data, 'users', id);

@@ -90,7 +90,7 @@ const updatePass = async (req: express.Request, res: express.Response) => {
         res.json('Password Upated')
     } catch (err) {
         res.status(400)
-        res.json(err)
+        res.json(`Can't update password${err}`)
     }
 }
 
