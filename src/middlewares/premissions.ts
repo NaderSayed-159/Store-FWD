@@ -28,11 +28,13 @@ export const accessByID = (req: express.Request, res: express.Response, next: Ne
 export const accessByToken = async (req: express.Request, res: express.Response, next: NextFunction) => {
     try {
         const usersNumber = await usersModel.fetchAllUsers();
-        console.log(usersNumber.length);
         if (usersNumber.length > 0) {
             const authorizationHeader = req.headers.authorization;
             const token = authorizationHeader?.split(' ')[1];
             jwt.verify(token as string, process.env.JWT_STRING as string) as JwtPayload
+        }else{
+            res.status(400)
+            res.json('Please create 1st user')
         }
     } catch (err) {
         res.status(401)

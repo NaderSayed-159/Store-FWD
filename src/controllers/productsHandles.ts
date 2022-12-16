@@ -47,10 +47,10 @@ const createProduct = async (req: express.Request, res: express.Response) => {
 }
 
 const updateProduct = async (req: express.Request, res: express.Response) => {
-    const userUpdates: [] = req.body;
+    const productUpdates: [] = req.body;
     try {
-        const updatedUser = await productsModel.updateProduct(req.params.id, userUpdates);
-        res.json(updatedUser)
+        const updatedProduct = await productsModel.updateProduct(req.params.id, productUpdates);
+        res.json(updatedProduct)
     } catch (err) {
         res.status(400);
         res.json(err)

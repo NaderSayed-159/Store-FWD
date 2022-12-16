@@ -44,9 +44,9 @@ export class ProductModel {
 
             const conn = await Client.connect()
             const result = await conn.query(sql, [creationInput.productName, creationInput.productPrice, creationInput.category_id])
-            const user = result.rows[0];
+            const product = result.rows[0];
             conn.release()
-            return user
+            return product
         } catch (err) {
             throw new Error(`Could not add new Product ${creationInput.productName}. Error: ${err}`)
         }

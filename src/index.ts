@@ -6,6 +6,7 @@ import userRoutes from './controllers/usersHandler';
 import ProductsRoutes from './controllers/productsHandles';
 import OrdersRoutes from './controllers/oredersHandler';
 import OrdersProductsRoutes from './controllers/orderProductHandler';
+import productsCategoriesRoutes from './controllers/productCategoryHandler';
 
 dotenv.config()
 
@@ -33,6 +34,7 @@ app.listen(port, () => {
 })
 
 userRoutes(app);
+productsCategoriesRoutes(app);
 ProductsRoutes(app);
 OrdersRoutes(app);
 OrdersProductsRoutes(app);

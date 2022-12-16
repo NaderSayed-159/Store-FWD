@@ -99,7 +99,6 @@ const updatePass = async (req: express.Request, res: express.Response) => {
 const userRoutes = (app: express.Application) => {
     app.get('/users', accessByToken, getUsers)
     app.get('/users/:id', accessByToken, userById)
-    // app.post('/users', createUser)
     app.post('/users', accessByToken, createUser)
     app.put('/users/:id/password', accessByID, updatePass)
     app.put('/users/:id', accessByToken, updateUser)
