@@ -2,6 +2,7 @@ import express, { NextFunction } from 'express';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import { UsersModel } from '../models/usersModel';
 import { json } from 'body-parser';
+import e from 'express';
 
 const usersModel = new UsersModel;
 
@@ -13,7 +14,6 @@ export const accessByID = (req: express.Request, res: express.Response, next: Ne
         console.log(decoded.user.id);
         console.log(parseInt(req.params.id));
         if (decoded.user.id != parseInt(req.params.id)) {
-            console.log("hello from here");
             throw new Error()
         }
 
@@ -25,16 +25,26 @@ export const accessByID = (req: express.Request, res: express.Response, next: Ne
     next();
 }
 
+const jwtVerify = (req: express.Request) => {
+    const authorizationHeader = req.headers.authorization;
+    const token = authorizationHeader?.split(' ')[1];
+    jwt.verify(token as string, process.env.JWT_STRING as string) as JwtPayload
+}
+
 export const accessByToken = async (req: express.Request, res: express.Response, next: NextFunction) => {
     try {
         const usersNumber = await usersModel.fetchAllUsers();
-        if (usersNumber.length > 0) {
-            const authorizationHeader = req.headers.authorization;
-            const token = authorizationHeader?.split(' ')[1];
-            jwt.verify(token as string, process.env.JWT_STRING as string) as JwtPayload
-        }else{
-            res.status(400)
-            res.json('Please create 1st user')
+        if (req.path == '/users') {
+            if (usersNumber.length > 0) {
+                jwtVerify(req);
+            }
+        } else {
+            if (usersNumber.length > 0) {
+                jwtVerify(req);
+            } else {
+                res.status(400)
+                return res.json('Please create 1st user')
+            }
         }
     } catch (err) {
         res.status(401)

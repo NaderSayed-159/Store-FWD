@@ -32,7 +32,11 @@ export class ProductModel {
             const sql = 'SELECT * FROM products WHERE id=($1)';
             const result = await con.query(sql, [id]);
             con.release();
-            return result.rows[0];
+            if (result.rowCount > 0) {
+                return result.rows[0];
+            } else {
+                throw new Error()
+            }
         } catch (err) {
             throw new Error(`Can't find Products:${id} ${err}`)
         }

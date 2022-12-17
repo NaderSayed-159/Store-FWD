@@ -30,7 +30,11 @@ export class CategoryModel {
             const sql = 'SELECT * FROM products_categories WHERE id=($1)';
             const result = await con.query(sql, [id]);
             con.release();
-            return result.rows[0];
+            if (result.rowCount > 0) {
+                return result.rows[0];
+            } else {
+                throw new Error()
+            }
         } catch (err) {
             throw new Error(`Can't find Categories:${id} ${err}`)
         }
@@ -61,7 +65,7 @@ export class CategoryModel {
             if (data.length == 0) {
                 throw new Error(`Updates can't be empty`)
             } else {
-                throw new Error(`Could not update Category of id=${id}. Error: ${err}`)
+                throw new Error(`Could not update Category of id=${id}`)
             }
 
         }

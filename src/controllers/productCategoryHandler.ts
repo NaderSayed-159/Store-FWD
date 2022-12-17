@@ -29,7 +29,7 @@ const createCategory = async (req: express.Request, res: express.Response) => {
     const createdCategory: Category = {
         categoryName: req.body.categoryName,
     }
-    
+
     try {
         const newCategory = await productCategoryModel.createCategory(createdCategory);
         res.status(201);
@@ -48,7 +48,7 @@ const updateCategory = async (req: express.Request, res: express.Response) => {
         res.json(updatedCategory)
     } catch (err) {
         res.status(400);
-        res.json(err)
+        res.json(`${err}`)
     }
 }
 
@@ -63,10 +63,10 @@ const deleteCategory = async (req: express.Request, res: express.Response) => {
 
 const productsCategoriesRoutes = (app: express.Application) => {
     app.get('/products/categories', getCategories)
-    app.get('/products/:id/categories', categoryById)
+    app.get('/products/categories/:id', categoryById)
     app.post('/products/categories', accessByToken, createCategory)
-    app.put('/products/:id/categories', accessByToken, updateCategory)
-    app.delete('/products/:id/categories', accessByToken, deleteCategory)
+    app.put('/products/categories/:id', accessByToken, updateCategory)
+    app.delete('/products/categories/:id', accessByToken, deleteCategory)
 }
 
 export default productsCategoriesRoutes;
