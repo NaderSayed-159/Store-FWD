@@ -80,7 +80,7 @@ const authenticate = async (req: express.Request, res: express.Response) => {
         }
     } catch (err) {
         res.status(401)
-        res.json({ err })
+        res.json(`${err}`)
     }
 }
 

@@ -21,7 +21,7 @@ const orderById = async (req: express.Request, res: express.Response) => {
         const user = await productsModel.getOrderById(req.params.id);
     } catch (err) {
         res.status(400);
-        res.json(err);
+        res.json(`${err}`);
     }
 }
 

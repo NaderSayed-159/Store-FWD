@@ -21,7 +21,7 @@ const categoryById = async (req: express.Request, res: express.Response) => {
         res.json(category);
     } catch (err) {
         res.status(400);
-        res.json(err);
+        res.json(`${err}`);
     }
 }
 

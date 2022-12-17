@@ -9,7 +9,7 @@ const getProductsOfOrder = async (req: express.Request, res: express.Response) =
         res.json(products);
     } catch (err) {
         res.status(400);
-        res.json(err);
+        res.json(`${err}`);
     }
 
 }
@@ -25,7 +25,7 @@ const addProductToOrder = async (req: express.Request, res: express.Response) =>
         res.json(productsAdded);
     } catch (err) {
         res.status(400);
-        res.json(err);
+        res.json(`${err}`);
     }
 
 }

@@ -1,4 +1,4 @@
-import { Product , ProductModel } from "../models/productsModel";
+import { Product, ProductModel } from "../models/productsModel";
 import express from "express";
 import { accessByToken } from "../middlewares/premissions";
 
@@ -20,11 +20,9 @@ const productById = async (req: express.Request, res: express.Response) => {
     try {
         const product = await productsModel.getProductsById(req.params.id);
         res.json(product)
-
-    
     } catch (err) {
         res.status(400);
-        res.json(err);
+        res.json(`${err}`);
     }
 }
 
@@ -67,7 +65,7 @@ const deleteProduct = async (req: express.Request, res: express.Response) => {
 }
 
 const ProductsRoutes = (app: express.Application) => {
-    app.get('/products',  getProducts)
+    app.get('/products', getProducts)
     app.get('/products/:id', productById)
     app.post('/products', accessByToken, createProduct)
     app.put('/products/:id', accessByToken, updateProduct)
@@ -75,4 +73,4 @@ const ProductsRoutes = (app: express.Application) => {
 }
 
 export default ProductsRoutes;
- 
+
