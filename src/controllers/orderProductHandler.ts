@@ -21,7 +21,7 @@ const addProductToOrder = async (req: express.Request, res: express.Response) =>
         quantity: req.body.quantity,
     }
     try {
-        const productsAdded = await orderProductModel.addProductToOrder(addedProduct);
+        const productsAdded = await orderProductModel.addProductToCart(addedProduct);
         res.json(productsAdded);
     } catch (err) {
         res.status(400);

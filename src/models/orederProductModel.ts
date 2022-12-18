@@ -25,7 +25,7 @@ export class OrderProductModel {
         }
     }
 
-    async addProductToOrder(additionInput: AddedProduct): Promise<AddedProduct> {
+    async addProductToCart(additionInput: AddedProduct): Promise<AddedProduct> {
         try {
             const sql = 'INSERT INTO products_orders (order_id, product_id,quantity) VALUES($1,$2,$3) RETURNING *'
             const conn = await Client.connect()

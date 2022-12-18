@@ -43,6 +43,22 @@ export class OrderModel {
         }
     }
 
+    async AcitveOrderOfUser(user_id: string) {
+        try {
+            const con = await Client.connect();
+            const sql = `SELECT * FROM orders WHERE user_id=($1) AND status='active'`;
+            const result = await con.query(sql, [user_id]);
+            con.release();
+            if (result.rowCount > 0) {
+                return result.rows[0];
+            } else {
+                return 'zero'
+            }
+        } catch (err) {
+            throw new Error(`can't get the record Error:${err}`)
+        }
+    }
+
     async createOrder(creationInput: Order): Promise<Order> {
         try {
             const sql = 'INSERT INTO orders (productsoforder, quantitiesofproducts,user_id,status) VALUES($1,$2,$3,$4) RETURNING *'
