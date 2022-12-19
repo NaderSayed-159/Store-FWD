@@ -17,7 +17,7 @@ export class OrderModel {
     async fetchAllOrders(): Promise<Order[]> {
         try {
             const con = await Client.connect();
-            const sql = 'SELECT * FROM products';
+            const sql = 'SELECT * FROM orders';
             const result = await con.query(sql);
             con.release();
             return result.rows;
@@ -50,9 +50,9 @@ export class OrderModel {
 
             const conn = await Client.connect()
             const result = await conn.query(sql, [creationInput.productsoforder, creationInput.quantitiesofproducts, creationInput.user_id, creationInput.status])
-            const user = result.rows[0];
+            const order = result.rows[0];
             conn.release()
-            return user
+            return order
         } catch (err) {
             throw new Error(`Could not add new Order. Error: ${err}`)
         }
@@ -101,5 +101,7 @@ export class OrderModel {
 
         }
     }
+
+    
 
 }

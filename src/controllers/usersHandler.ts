@@ -70,7 +70,6 @@ const authenticate = async (req: express.Request, res: express.Response) => {
     }
     try {
         const authUser = await userModel.auth(loginedUser.loginName, loginedUser.password);
-        console.log('authUser', authUser)
         if (authUser != null) {
             const token = jwt.sign({ user: authUser }, process.env.JWT_String as Secret);
             res.json(token);

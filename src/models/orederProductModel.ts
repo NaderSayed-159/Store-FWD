@@ -6,7 +6,7 @@ dotenv.config();
 
 export type AddedProduct = {
     id?: Number,
-    order_id: Number,
+    order_id?: Number,
     product_id: Number,
     quantity: Number,
 }
@@ -59,5 +59,35 @@ export class OrderProductModel {
         }
     }
 
+    async checkProductInCart(order_id: string, product_id: string) {
+        try {
+            const con = await Client.connect();
+            const sql = 'SELECT * FROM products_orders WHERE order_id=($1) AND product_id=($2)';
+            const result = await con.query(sql, [order_id, product_id]);
+            if (result.rowCount > 0) {
+                return {
+                    "status": "contain",
+                    rows: result.rows[0]
+                }
+            } else {
+                return {
+                    "status": "not",
+                }
+            }
+        } catch (err) {
+            throw new Error(`${err}`)
+        }
+    }
+
+    async updateCartProduct(quantity: number, order_id: string, product_id: string) {
+        try {
+            const con = await Client.connect();
+            const sql = 'UPDATE products_orders SET quantity=($1) WHERE order_id=($2) AND product_id=($3)';
+            const result = await con.query(sql, [quantity, order_id, product_id]);
+            return result
+        } catch (err) {
+            throw new Error(`${err}`)
+        }
+    }
 
 }
