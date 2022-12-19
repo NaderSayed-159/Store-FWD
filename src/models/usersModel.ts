@@ -6,7 +6,6 @@ import * as helpers from '../middlewares/helperFunction'
 dotenv.config();
 
 const prepper: string = process.env.BCRYPT_PASSWORD as string;
-const saltRounds = process.env.SALT_ROUNDS as string;
 
 
 export type User = {

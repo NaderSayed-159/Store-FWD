@@ -64,7 +64,7 @@ const deleteOrder = async (req: express.Request, res: express.Response) => {
     }
 }
 
-const OrderByUser = async (req: express.Request, res: express.Response) => {
+const OrdersByUser = async (req: express.Request, res: express.Response) => {
     try {
         const ordersOfUser = await orderModel.getOrdersOfUser(req.params.id);
         res.json(ordersOfUser)
@@ -79,7 +79,7 @@ const OrdersRoutes = (app: express.Application) => {
     app.post('/orders', accessByToken, createOrder)
     app.put('/orders/:id', accessByToken, updateOrder)
     app.delete('/orders/:id', accessByToken, deleteOrder)
-    app.get('/users/:id/orders', accessByID, OrderByUser)
+    app.get('/users/:id/orders', accessByID, OrdersByUser)
 }
 
 export default OrdersRoutes;

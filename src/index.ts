@@ -38,3 +38,6 @@ productsCategoriesRoutes(app);
 ProductsRoutes(app);
 OrdersRoutes(app);
 OrdersProductsRoutes(app);
+
+
+export default app;

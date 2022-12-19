@@ -31,8 +31,6 @@ the application will run on route' http://localhost:3000 '
 
 ## Users Model
 
-first of all you just need to uncomment the code line 90 to add 1st user without token needed and comment line **91**
-
 then you can do all request on '**http://localhost:3000/users**'
 
 * to get all users use [ **Get** ] verb on above route
