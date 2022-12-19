@@ -9,8 +9,9 @@ export const accessByID = (req: express.Request, res: express.Response, next: Ne
         const authorizationHeader = req.headers.authorization;
         const token = authorizationHeader?.split(' ')[1];
         const decoded = jwt.verify(token as string, process.env.JWT_STRING as string) as JwtPayload
-        // console.log(decoded.user.id);
-        // console.log(parseInt(req.params.id));
+        // console.log('decoded', decoded)
+        // console.log('decoded.user.id', decoded.user.id)
+        // console.log('req.params.id', req.params.id)
         if (decoded.user.id != parseInt(req.params.id)) {
             throw new Error()
         }
@@ -29,7 +30,7 @@ const jwtVerify = (req: express.Request) => {
     jwt.verify(token as string, process.env.JWT_STRING as string) as JwtPayload
 }
 
-export const tokenUser = (req: express.Request) => {
+export const tokenUserID = (req: express.Request) => {
     const authorizationHeader = req.headers.authorization;
     const token = authorizationHeader?.split(' ')[1];
     const decoded = jwt.verify(token as string, process.env.JWT_STRING as string) as JwtPayload

@@ -1,8 +1,10 @@
 import express from "express";
 import { OrderProductModel, AddedProduct } from "../models/orederProductModel";
-import { tokenUser } from "../middlewares/premissions";
+import { tokenUserID, accessByToken } from "../middlewares/premissions";
 import { Order, OrderModel } from "../models/ordersModel";
-import e from "express";
+
+
+
 const orderProductModel = new OrderProductModel;
 const orderModel = new OrderModel;
 
@@ -19,7 +21,7 @@ const getProductsOfOrder = async (req: express.Request, res: express.Response) =
 
 const addProductToCart = async (req: express.Request, res: express.Response) => {
     try {
-        const decodedTokenUser = tokenUser(req);
+        const decodedTokenUser = tokenUserID(req);
         const activeOrder = await orderProductModel.AcitveOrderOfUser(decodedTokenUser);
         if (activeOrder.status == 'active') {
             const productCheck = await orderProductModel.checkProductInCart(activeOrder.rows.id, req.body.product_id);
@@ -114,10 +116,10 @@ const deleteCartProduct = async (req: express.Request, res: express.Response) =>
 }
 
 const OrdersProductsRoutes = (app: express.Application) => {
-    app.get('/orders/:id/products', getProductsOfOrder)
-    app.post('/orders/products', addProductToCart)
-    app.post('/orders/:id/confirm', cofirmOrder)
-    app.delete('/orders/:order_id/products/:id', deleteCartProduct)
+    app.get('/orders/:id/products', accessByToken, getProductsOfOrder)
+    app.post('/orders/products', accessByToken, addProductToCart)
+    app.post('/orders/:id/confirm', accessByToken, cofirmOrder)
+    app.delete('/orders/:order_id/products/:id', accessByToken, deleteCartProduct)
 }
 
 export default OrdersProductsRoutes;

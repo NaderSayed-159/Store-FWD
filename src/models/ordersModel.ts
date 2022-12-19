@@ -92,7 +92,7 @@ export class OrderModel {
     async getOrdersOfUser(userId: String): Promise<Order[]> {
         try {
             const con = await Client.connect();
-            const sql = 'SELECT * FROM products WHERE user_id=($1)';
+            const sql = 'SELECT * FROM orders WHERE user_id=($1)';
             const result = await con.query(sql, [userId]);
             con.release();
             return result.rows;
