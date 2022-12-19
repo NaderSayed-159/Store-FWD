@@ -102,6 +102,20 @@ export class OrderModel {
         }
     }
 
-    
+    async confirmOrder(order_id: string, orderProducts: string, productsQuantites: string): Promise<Order[]> {
+        try {
+            const data = [
+                { "productsoforder": orderProducts },
+                { "quantitiesofproducts": productsQuantites },
+                { "status": "completed" }
+            ]
+            const con = await Client.connect();
+            const sql = helpers.generteUpdateQuerey(data as [], "orders", order_id);
+            const result = await con.query(sql);
+            return result.rows[0]
+        } catch (err) {
+            throw new Error(`${err}`)
+        }
+    }
 
 }

@@ -21,7 +21,6 @@ const addProductToCart = async (req: express.Request, res: express.Response) => 
     try {
         const decodedTokenUser = tokenUser(req);
         const activeOrder = await orderProductModel.AcitveOrderOfUser(decodedTokenUser);
-        console.log('activeOrder', activeOrder)
         if (activeOrder.status == 'active') {
             const productCheck = await orderProductModel.checkProductInCart(activeOrder.rows.id, req.body.product_id);
             if (productCheck.status == 'not') {
@@ -33,7 +32,9 @@ const addProductToCart = async (req: express.Request, res: express.Response) => 
                 const productsAdded = await orderProductModel.addProductToCart(addedProduct);
                 res.json(productsAdded);
             } else {
-                const updatedProduct = await orderProductModel.updateCartProduct(req.body.quantity, activeOrder.rows.id, req.body.product_id)
+                const newQunatity = parseInt(req.body.quantity) + parseInt(productCheck.rows.quantity);
+                const updatedProduct = await orderProductModel.updateCartProduct(newQunatity, activeOrder.rows.id, req.body.product_id)
+                res.json(updatedProduct);
             }
 
         } else {
@@ -60,28 +61,63 @@ const addProductToCart = async (req: express.Request, res: express.Response) => 
 const getDetailsString = (array: AddedProduct[], flag: string) => {
     let output: string = '';
     if (flag == 'products') {
-        array.forEach(el => {
-            output += el.product_id;
+        array.forEach((el, index) => {
+            if (index != 0) {
+                output += `,${el.product_id}`;
+            } else {
+                output += `${el.product_id}`;
+
+            }
+
         })
     } else if (flag = 'quantity') {
-        array.forEach(el => {
-            output += el.quantity;
+        array.forEach((el, index) => {
+            if (index != 0) {
+                output += `,${el.quantity}`;
+            } else {
+                output += `${el.quantity}`;
+            }
         })
+
     }
     return output;
 }
 
 const cofirmOrder = async (req: express.Request, res: express.Response) => {
-    const orderProducts = await orderProductModel.fetchAllProductsbyOrder(req.params.id);
-    const producString = getDetailsString(orderProducts, 'products');
-    res.json(producString);
+    try {
+        const orderProducts = await orderProductModel.fetchAllProductsbyOrder(req.params.id);
+        const order = await orderModel.getOrderById(req.params.id);
+        if (order.status == 'completed') {
+            throw new Error('order is already closed')
+        }
+        const products = getDetailsString(orderProducts, 'products');
+        const qunatites = getDetailsString(orderProducts, 'quantity');
+        await orderModel.confirmOrder(req.params.id, products, qunatites)
+        const confirmedOrder = await orderModel.getOrderById(req.params.id);
+        res.json(confirmedOrder);
+    } catch (err) {
+        res.json(`${err}`)
+    }
+}
+
+const deleteCartProduct = async (req: express.Request, res: express.Response) => {
+    try {
+        const order = await orderModel.getOrderById(req.params.order_id);
+        if (order.status == 'completed') {
+            throw new Error("order is already closed & can't be modified")
+        }
+        const deletedProduct = await orderProductModel.deleteCartProduct(req.params.order_id, req.params.id);
+        res.json(deletedProduct);
+    } catch (err) {
+        res.json(`${err}`)
+    }
 }
 
 const OrdersProductsRoutes = (app: express.Application) => {
     app.get('/orders/:id/products', getProductsOfOrder)
     app.post('/orders/products', addProductToCart)
     app.post('/orders/:id/confirm', cofirmOrder)
-
+    app.delete('/orders/:order_id/products/:id', deleteCartProduct)
 }
 
 export default OrdersProductsRoutes;

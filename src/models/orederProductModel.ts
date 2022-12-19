@@ -16,7 +16,7 @@ export class OrderProductModel {
     async fetchAllProductsbyOrder(orderId: String): Promise<AddedProduct[]> {
         try {
             const con = await Client.connect();
-            const sql = `SELECT * FROM products_orders WHERE order_id($1)`;
+            const sql = `SELECT * FROM products_orders WHERE order_id=($1)`;
             const result = await con.query(sql, [orderId]);
             con.release();
             return result.rows;
@@ -84,10 +84,22 @@ export class OrderProductModel {
             const con = await Client.connect();
             const sql = 'UPDATE products_orders SET quantity=($1) WHERE order_id=($2) AND product_id=($3)';
             const result = await con.query(sql, [quantity, order_id, product_id]);
-            return result
+            return result.rows[0]
         } catch (err) {
             throw new Error(`${err}`)
         }
     }
+
+    async deleteCartProduct(order_id: string, product_id: string) {
+        try {
+            const con = await Client.connect();
+            const sql = 'DELETE FROM products_orders WHERE order_id=($1) AND product_id=($2)';
+            const result = await con.query(sql, [order_id, product_id]);
+            return result.rows[0]
+        } catch (err) {
+            throw new Error(`${err}`)
+        }
+    }
+
 
 }
