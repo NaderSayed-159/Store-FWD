@@ -1,4 +1,4 @@
-CREATE TABLE Orders (
+CREATE TABLE orders (
     id SERIAL PRIMARY KEY,
     productsOfOrder VARCHAR(150),
     quantitiesOfProducts VARCHAR(150),

@@ -1,1 +1,1 @@
-DROP TABLE Products_Categories;
+DROP TABLE products_categories;

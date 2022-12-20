@@ -1,1 +1,1 @@
-CREATE TABLE Products_Categories(id SERIAL PRIMARY KEY,categoryName VARCHAR(100));
+CREATE TABLE products_categories(id SERIAL PRIMARY KEY,categoryName VARCHAR(100));

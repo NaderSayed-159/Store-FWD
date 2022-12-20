@@ -1,1 +1,1 @@
-DROP TABLE Orders;
+DROP TABLE orders;

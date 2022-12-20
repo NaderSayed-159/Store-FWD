@@ -6,7 +6,7 @@
   "scripts": {
     "build": "npx tsc",
     "start": "node src/index.js",
-    "test": "set NODE_ENV=test && db-migrate --env test up && npx tsc && jasmine && db-migrate db:drop test",
+    "test": "set NODE_ENV = test && db-migrate --env test up && npx tsc && jasmine && db-migrate --env test down",
     "dev": "npx ts-node src/.",
     "prettier": "prettier --config .prettierrc \"src/**/*.ts\" --write"
   },
