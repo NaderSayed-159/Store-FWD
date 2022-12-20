@@ -32,7 +32,6 @@ describe("Users Model defination", () => {
     });
   });
   describe("Users Model endpoints", () => {
-    //test endpoint using jasmine using supertest?
     beforeAll(async () => {
       await userModel.createUser(user);
     });

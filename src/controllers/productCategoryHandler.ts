@@ -27,7 +27,7 @@ const categoryById = async (req: express.Request, res: express.Response) => {
 
 const createCategory = async (req: express.Request, res: express.Response) => {
   const createdCategory: Category = {
-    categoryName: req.body.categoryName,
+    categoryname: req.body.categoryName,
   };
 
   try {

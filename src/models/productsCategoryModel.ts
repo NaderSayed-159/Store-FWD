@@ -6,7 +6,7 @@ dotenv.config();
 
 export type Category = {
   id?: Number;
-  categoryName: String;
+  categoryname: String;
 };
 
 export class CategoryModel {
@@ -43,25 +43,25 @@ export class CategoryModel {
       const sql =
         "INSERT INTO products_categories (categoryname) VALUES($1) RETURNING *";
       const conn = await Client.connect();
-      const result = await conn.query(sql, [creationInput.categoryName]);
+      const result = await conn.query(sql, [creationInput.categoryname]);
       const category = result.rows[0];
       conn.release();
       return category;
     } catch (err) {
       throw new Error(
-        `Could not add new Category ${creationInput.categoryName}. Error: ${err}`
+        `Could not add new Category ${creationInput.categoryname}. Error: ${err}`
       );
     }
   }
 
-  async updateCategory(id: String, data: []): Promise<Category> {
+  async updateCategory(id: String, data: []): Promise<string> {
     try {
       const conn = await Client.connect();
       const sql = helpers.generteUpdateQuerey(data, "products_categories", id);
       const result = await conn.query(sql);
       const category = result.rows[0];
       conn.release();
-      return category;
+      return 'Category Updated';
     } catch (err) {
       if (data.length == 0) {
         throw new Error(`Updates can't be empty`);
@@ -70,14 +70,14 @@ export class CategoryModel {
       }
     }
   }
-  async deleteCategory(id: string): Promise<Category> {
+  async deleteCategory(id: string): Promise<string> {
     try {
       const conn = await Client.connect();
       const sql = "DELETE FROM products_categories WHERE id=($1)";
       const result = await conn.query(sql, [id]);
       const category = result.rows[0];
       conn.release();
-      return category;
+      return 'Category Deleted';
     } catch (err) {
       throw new Error(`Could not delete Category ${id}. Error: ${err}`);
     }

@@ -30,9 +30,8 @@ describe("Products Model defination", () => {
         });
     });
     describe("Products Model endpoints", () => {
-        //test endpoint using jasmine using supertest?
         beforeAll(async () => {
-            await categoryModel.createCategory({categoryName:"wooden"});
+            await categoryModel.createCategory({categoryname:"wooden"});
             await productModel.createProduct(product);
         });
         it("Fetch all Products", async () => {
@@ -51,8 +50,8 @@ describe("Products Model defination", () => {
 
         it('product deletion', async () => {
             await productModel.createProduct(product);
-            const deletedUser = await productModel.deleteProduct('2');
-            expect(deletedUser).toEqual("Product Deleted");
+            const deletedProduct = await productModel.deleteProduct('2');
+            expect(deletedProduct).toEqual("Product Deleted");
         })
 
     });
