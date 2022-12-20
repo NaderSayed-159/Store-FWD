@@ -13,9 +13,9 @@ const order: Order = {
     user_id: 1
 };
 const user: User = {
-    firstName: "Nader",
+    firstname: "Nader",
     lastName: "Sayed",
-    loginname: "admin",
+    loginName: "admin",
     password: "Pass123$",
 };
 describe("Orders Model defination", () => {

@@ -1,16 +1,24 @@
 import { UsersModel, User } from "../usersModel";
 import Client from "../../database";
+import app from "../..";
+import supertest from "supertest";
+
+
 const userModel = new UsersModel;
-
-
+const req = supertest(app);
+const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImZpcnN0bmFtZSI6Ik5hZGVyIiwibGFzdG5hbWUiOiJTYXllZCIsImxvZ2lubmFtZSI6ImFkbWluMSJ9LCJpYXQiOjE2NzE1NzIwMjh9.SJ0gaHqTfIfNbrEOR3hEEKDoC87lHyUyDdgUjFpCwpM"
 const user: User = {
-  firstName: "Nader",
+  firstname: "Nader",
   lastName: "Sayed",
-  loginname: "admin",
+  loginName: "admin",
   password: "Pass123$",
 };
 
 describe("Users Model defination", () => {
+  beforeAll(async () => {
+    await userModel.createUser(user);
+  });
+
   describe("Users Model functions defination", () => {
     it("should have fetchAll", () => {
       expect(userModel.fetchAllUsers).toBeDefined();
@@ -30,18 +38,19 @@ describe("Users Model defination", () => {
     it("should have authentication function", () => {
       expect(userModel.auth).toBeDefined();
     });
-  });
-  describe("Users Model endpoints", () => {
-    beforeAll(async () => {
-      await userModel.createUser(user);
+    it("should have update password function", () => {
+      expect(userModel.updatePassword).toBeDefined();
     });
+  });
+  describe("Users Model actions", () => {
+
     it("Fetch all users", async () => {
       const users = await userModel.fetchAllUsers();
       expect(users.length).toBeGreaterThanOrEqual(1);
     });
     it("Fetch by id", async () => {
       const user = await userModel.getUserById('1');
-      expect(user.loginname).toEqual('admin');
+      expect(user.firstname).toEqual('Nader');
     })
     it('update user', async () => {
       const data: [] = [{ "firstName": "updated" }] as unknown as []
@@ -56,10 +65,59 @@ describe("Users Model defination", () => {
     })
 
     it('get token authentication', async () => {
-      const auth = await userModel.auth(user.loginname, user.password);
+      const auth = await userModel.auth(user.loginName, user.password);
       expect(auth?.id).toEqual(1)
     })
+
+    it('update Password', async () => {
+      const password = await userModel.updatePassword("newPass123$", "1");
+      expect(password).toEqual("Password Updated");
+    })
   });
+
+
+  describe("User Routes", () => {
+    it("Get all users endpoint", async () => {
+      const res = await req.get("/users").set("Authorization", `bearer ${token}`);
+      expect(res.status).toBe(200);
+    });
+    it("Get user by id route ", async () => {
+      const res = await req.get("/users/1").set("Authorization", `bearer ${token}`);
+      expect(res.status).toBe(200);
+    });
+    it("Create user route", async () => {
+      const newUser = {
+        loginName: "admin",
+        firstName: "Nader",
+        lastName: "Sayed",
+        password: "Pass123$",
+      }
+
+      const res = await req.post("/users").send(newUser).set("Authorization", `bearer ${token}`);
+      expect(res.status).toBe(201);
+    });
+
+    it("update user route ", async () => {
+      const res = await req.put("/users/1").send([{ "firstname": "newName" }]).set("Authorization", `bearer ${token}`);
+      expect(res.status).toBe(200);
+    });
+
+    it("delete user route", async () => {
+      await userModel.createUser(user)
+      const res = await req.delete("/users/3").set("Authorization", `bearer ${token}`);
+      expect(res.status).toBe(200);
+    });
+
+    it("auth route", async () => {
+      await userModel.fetchAllUsers();
+      
+      const res = await req.post("/users/auth").send({
+        "loginName": "admin",
+        "password": "Pass123$"
+      });
+      expect(res.status).toBe(200);
+    });
+  })
 
   afterAll(async () => {
     const con = await Client.connect();
@@ -74,11 +132,4 @@ describe("Users Model defination", () => {
   });
 });
 
-// import app from "../..";
-// import supertest from "supertest";
-// const req = supertest(app);
 
-// it("Test resizing form endpoint", async () => {
-//     const res = await req.get("/api");
-//     expect(res.status).toBe(200);
-// });

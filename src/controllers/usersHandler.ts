@@ -10,7 +10,7 @@ const getUsers = async (_req: express.Request, res: express.Response): Promise<v
     const allUsers = await userModel.fetchAllUsers();
     res.json(allUsers);
   } catch (err) {
-    res.json(err);
+    res.json(`${err}`);
   }
 };
 
@@ -26,9 +26,9 @@ const userById = async (req: express.Request, res: express.Response): Promise<vo
 
 const createUser = async (req: express.Request, res: express.Response): Promise<void> => {
   const createdUser: User = {
-    firstName: req.body.firstName,
+    firstname: req.body.firstName,
     lastName: req.body.lastName,
-    loginname: req.body.loginName,
+    loginName: req.body.loginName,
     password: req.body.password,
   };
 
@@ -93,11 +93,11 @@ const authenticate = async (req: express.Request, res: express.Response): Promis
 
 const updatePass = async (req: express.Request, res: express.Response): Promise<void> => {
   try {
-    const updatedPass = await userModel.updatePassword(
+    await userModel.updatePassword(
       req.body.password,
       req.params.id
     );
-    res.json("Password Upated");
+    res.json("Password Updated");
   } catch (err) {
     res.status(400);
     res.json(`Can't update password${err}`);

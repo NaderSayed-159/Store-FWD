@@ -9,9 +9,9 @@ const prepper: string = process.env.BCRYPT_PASSWORD as string;
 
 export type User = {
   id?: Number;
-  firstName: String;
+  firstname: String;
   lastName: String;
-  loginname: String;
+  loginName: String;
   password: string;
 };
 
@@ -52,9 +52,9 @@ export class UsersModel {
 
       const conn = await Client.connect();
       const result = await conn.query(sql, [
-        creationInput.firstName,
+        creationInput.firstname,
         creationInput.lastName,
-        creationInput.loginname,
+        creationInput.loginName,
         hashedPassword,
       ]);
       const user = result.rows[0];
@@ -62,7 +62,7 @@ export class UsersModel {
       return user;
     } catch (err) {
       throw new Error(
-        `Could not add new user ${creationInput.loginname}. Error: ${err}`
+        `Could not add new user ${creationInput.loginName}. Error: ${err}`
       );
     }
   }
@@ -99,12 +99,14 @@ export class UsersModel {
 
   async auth(loginName: String, inputPass: String): Promise<User | null> {
     const conn = await Client.connect();
-    const sql = "SELECT * FROM users WHERE loginname=($1)";
+    const sql = "SELECT password FROM users WHERE loginname=($1)";
     const result = await conn.query(sql, [loginName]);
     if (result.rows.length) {
-      const user = result.rows[0];
-      if (bcrypt.compareSync(inputPass + prepper, user.password)) {
-        return user;
+      const password = result.rows[0];
+      if (bcrypt.compareSync(inputPass + prepper, password.password)) {
+        const sql2 = "SELECT id ,firstname , lastname , loginname FROM users WHERE loginname=($1)";
+        const result2 = await conn.query(sql2, [loginName]);
+        return result2.rows[0]
       }
     }
     return null;
@@ -119,7 +121,7 @@ export class UsersModel {
       const result = await conn.query(sql, [hashedPassword, id]);
       const user = result.rows[0];
       conn.release();
-      return "Passowrd Updated";
+      return "Password Updated";
     } catch (err) {
       throw new Error(`Can't update password Error: ${err}`);
     }
