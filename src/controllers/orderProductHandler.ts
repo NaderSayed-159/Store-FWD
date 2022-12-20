@@ -3,8 +3,8 @@ import { OrderProductModel, AddedProduct } from "../models/orederProductModel";
 import { tokenUserID, accessByToken } from "../middlewares/premissions";
 import { Order, OrderModel } from "../models/ordersModel";
 
-const orderProductModel = new OrderProductModel();
-const orderModel = new OrderModel();
+const orderProductModel = new OrderProductModel;
+const orderModel = new OrderModel;
 
 const getProductsOfOrder = async (
   req: express.Request,
@@ -76,46 +76,7 @@ const addProductToCart = async (
   }
 };
 
-const getDetailsString = (array: AddedProduct[], flag: string) => {
-  let output: string = "";
-  if (flag == "products") {
-    array.forEach((el, index) => {
-      if (index != 0) {
-        output += `,${el.product_id}`;
-      } else {
-        output += `${el.product_id}`;
-      }
-    });
-  } else if ((flag = "quantity")) {
-    array.forEach((el, index) => {
-      if (index != 0) {
-        output += `,${el.quantity}`;
-      } else {
-        output += `${el.quantity}`;
-      }
-    });
-  }
-  return output;
-};
 
-const cofirmOrder = async (req: express.Request, res: express.Response) => {
-  try {
-    const orderProducts = await orderProductModel.fetchAllProductsbyOrder(
-      req.params.id
-    );
-    const order = await orderModel.getOrderById(req.params.id);
-    if (order.status == "completed") {
-      throw new Error("order is already closed");
-    }
-    const products = getDetailsString(orderProducts, "products");
-    const qunatites = getDetailsString(orderProducts, "quantity");
-    await orderModel.confirmOrder(req.params.id, products, qunatites);
-    const confirmedOrder = await orderModel.getOrderById(req.params.id);
-    res.json(confirmedOrder);
-  } catch (err) {
-    res.json(`${err}`);
-  }
-};
 
 const deleteCartProduct = async (
   req: express.Request,
@@ -139,7 +100,6 @@ const deleteCartProduct = async (
 const OrdersProductsRoutes = (app: express.Application) => {
   app.get("/orders/:id/products", accessByToken, getProductsOfOrder);
   app.post("/orders/products", accessByToken, addProductToCart);
-  app.post("/orders/:id/confirm", accessByToken, cofirmOrder);
   app.delete(
     "/orders/:order_id/products/:id",
     accessByToken,

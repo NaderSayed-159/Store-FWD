@@ -1,5 +1,6 @@
 import bcrypt from "bcrypt";
 import dotenv from "dotenv";
+import { AddedProduct } from "../models/orederProductModel";
 
 dotenv.config();
 
@@ -51,4 +52,26 @@ export const generteUpdateQuerey = (data: [], table: string, id: String) => {
   });
   updateQuerey += `WHERE id=${id}`;
   return updateQuerey;
+};
+
+export const getDetailsString = (array: AddedProduct[], flag: string) => {
+  let output: string = "";
+  if (flag == "products") {
+    array.forEach((el, index) => {
+      if (index != 0) {
+        output += `,${el.product_id}`;
+      } else {
+        output += `${el.product_id}`;
+      }
+    });
+  } else if ((flag = "quantity")) {
+    array.forEach((el, index) => {
+      if (index != 0) {
+        output += `,${el.quantity}`;
+      } else {
+        output += `${el.quantity}`;
+      }
+    });
+  }
+  return output;
 };

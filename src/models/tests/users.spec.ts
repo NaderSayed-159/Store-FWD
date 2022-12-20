@@ -1,6 +1,6 @@
 import { UsersModel, User } from "../usersModel";
 import Client from "../../database";
-const userModel = new UsersModel();
+const userModel = new UsersModel;
 
 
 const user: User = {

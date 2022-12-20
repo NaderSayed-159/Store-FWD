@@ -1,6 +1,6 @@
 import Client from "../database";
 import dotenv from "dotenv";
-import * as helpers from "../middlewares/helperFunction";
+import * as helpers from "../services/helperFunction";
 
 dotenv.config();
 
@@ -61,14 +61,14 @@ export class OrderModel {
     }
   }
 
-  async updateOrder(id: String, data: []): Promise<Order> {
+  async updateOrder(id: String, data: []): Promise<string> {
     try {
       const conn = await Client.connect();
       const sql = helpers.generteUpdateQuerey(data, "orders", id);
       const result = await conn.query(sql);
       const order = result.rows[0];
       conn.release();
-      return order;
+      return 'Order Updated';
     } catch (err) {
       if (data.length == 0) {
         throw new Error(`Updates can't be empty`);
@@ -78,14 +78,14 @@ export class OrderModel {
     }
   }
 
-  async deleteOrder(id: string): Promise<Order> {
+  async deleteOrder(id: string): Promise<string> {
     try {
       const conn = await Client.connect();
       const sql = "DELETE FROM orders WHERE id=($1)";
       const result = await conn.query(sql, [id]);
       const order = result.rows[0];
       conn.release();
-      return order;
+      return 'Order Deleted';
     } catch (err) {
       throw new Error(`Could not delete order ${id}. Error: ${err}`);
     }

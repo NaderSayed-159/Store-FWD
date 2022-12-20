@@ -104,7 +104,7 @@ const updatePass = async (req: express.Request, res: express.Response): Promise<
   }
 };
 
-const userRoutes = (app: express.Application) => {
+const userRoutes = (app: express.Application): void => {
   app.get("/users", accessByToken, getUsers);
   app.get("/users/:id", accessByToken, userById);
   app.post("/users", accessByToken, createUser);

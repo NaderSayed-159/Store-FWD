@@ -1,6 +1,6 @@
 import Client from "../database";
 import dotenv from "dotenv";
-import * as helpers from "../middlewares/helperFunction";
+import * as helpers from "../services/helperFunction";
 
 dotenv.config();
 

@@ -1,8 +1,8 @@
 import { ProductModel, Product } from "../productsModel";
 import { CategoryModel, Category } from "../productsCategoryModel";
 import Client from "../../database";
-const productModel = new ProductModel();
-const categoryModel = new CategoryModel();
+const productModel = new ProductModel;
+const categoryModel = new CategoryModel;
 
 
 const product: Product = {

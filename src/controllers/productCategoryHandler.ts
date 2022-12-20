@@ -4,7 +4,7 @@ import { Category, CategoryModel } from "../models/productsCategoryModel";
 
 const productCategoryModel = new CategoryModel();
 
-const getCategories = async (_req: express.Request, res: express.Response) => {
+const getCategories = async (_req: express.Request, res: express.Response): Promise<void> => {
   try {
     const allCategories = await productCategoryModel.fetchAllCategories();
     res.json(allCategories);
@@ -13,7 +13,7 @@ const getCategories = async (_req: express.Request, res: express.Response) => {
   }
 };
 
-const categoryById = async (req: express.Request, res: express.Response) => {
+const categoryById = async (req: express.Request, res: express.Response): Promise<void> => {
   try {
     const category = await productCategoryModel.getCategoriesById(
       req.params.id
@@ -25,7 +25,7 @@ const categoryById = async (req: express.Request, res: express.Response) => {
   }
 };
 
-const createCategory = async (req: express.Request, res: express.Response) => {
+const createCategory = async (req: express.Request, res: express.Response): Promise<void> => {
   const createdCategory: Category = {
     categoryname: req.body.categoryName,
   };
@@ -43,7 +43,7 @@ const createCategory = async (req: express.Request, res: express.Response) => {
   }
 };
 
-const updateCategory = async (req: express.Request, res: express.Response) => {
+const updateCategory = async (req: express.Request, res: express.Response): Promise<void> => {
   const categoryUpdates: [] = req.body;
   try {
     const updatedCategory = await productCategoryModel.updateCategory(
@@ -57,7 +57,7 @@ const updateCategory = async (req: express.Request, res: express.Response) => {
   }
 };
 
-const deleteCategory = async (req: express.Request, res: express.Response) => {
+const deleteCategory = async (req: express.Request, res: express.Response): Promise<void> => {
   try {
     const deletedCategory = await productCategoryModel.deleteCategory(
       req.params.id
@@ -68,7 +68,7 @@ const deleteCategory = async (req: express.Request, res: express.Response) => {
   }
 };
 
-const productsCategoriesRoutes = (app: express.Application) => {
+const productsCategoriesRoutes = (app: express.Application): void => {
   app.get("/products/categories", getCategories);
   app.get("/products/categories/:id", categoryById);
   app.post("/products/categories", accessByToken, createCategory);
