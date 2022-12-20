@@ -6,8 +6,8 @@ dotenv.config();
 
 export type Product = {
   id?: Number;
-  productName: String;
-  productPrice: Number;
+  productname: String;
+  productprice: Number;
   category_id: Number;
 };
 
@@ -47,8 +47,8 @@ export class ProductModel {
 
       const conn = await Client.connect();
       const result = await conn.query(sql, [
-        creationInput.productName,
-        creationInput.productPrice,
+        creationInput.productname,
+        creationInput.productprice,
         creationInput.category_id,
       ]);
       const product = result.rows[0];
@@ -56,19 +56,19 @@ export class ProductModel {
       return product;
     } catch (err) {
       throw new Error(
-        `Could not add new Product ${creationInput.productName}. Error: ${err}`
+        `Could not add new Product ${creationInput.productname}. Error: ${err}`
       );
     }
   }
 
-  async updateProduct(id: String, data: []): Promise<Product> {
+  async updateProduct(id: String, data: []): Promise<string> {
     try {
       const conn = await Client.connect();
       const sql = helpers.generteUpdateQuerey(data, "products", id);
       const result = await conn.query(sql);
       const product = result.rows[0];
       conn.release();
-      return product;
+      return "Product Updated";
     } catch (err) {
       if (data.length == 0) {
         throw new Error(`Updates can't be empty`);
@@ -77,14 +77,15 @@ export class ProductModel {
       }
     }
   }
-  async deleteProduct(id: string): Promise<Product> {
+  async deleteProduct(id: string): Promise<string> {
     try {
       const conn = await Client.connect();
       const sql = "DELETE FROM products WHERE id=($1)";
       const result = await conn.query(sql, [id]);
       const product = result.rows[0];
       conn.release();
-      return product;
+
+      return 'Product Deleted';
     } catch (err) {
       throw new Error(`Could not delete product ${id}. Error: ${err}`);
     }

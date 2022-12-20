@@ -11,7 +11,7 @@ export type User = {
   id?: Number;
   firstName: String;
   lastName: String;
-  loginName: String;
+  loginname: String;
   password: string;
 };
 
@@ -54,7 +54,7 @@ export class UsersModel {
       const result = await conn.query(sql, [
         creationInput.firstName,
         creationInput.lastName,
-        creationInput.loginName,
+        creationInput.loginname,
         hashedPassword,
       ]);
       const user = result.rows[0];
@@ -62,19 +62,19 @@ export class UsersModel {
       return user;
     } catch (err) {
       throw new Error(
-        `Could not add new user ${creationInput.loginName}. Error: ${err}`
+        `Could not add new user ${creationInput.loginname}. Error: ${err}`
       );
     }
   }
 
-  async updateUser(id: String, data: []): Promise<User> {
+  async updateUser(id: String, data: []): Promise<string> {
     try {
       const conn = await Client.connect();
       const sql = helpers.generteUpdateQuerey(data, "users", id);
       const result = await conn.query(sql);
       const user = result.rows[0];
       conn.release();
-      return user;
+      return 'User Updated';
     } catch (err) {
       if (data.length == 0) {
         throw new Error(`Updates can't be empty`);
@@ -84,14 +84,14 @@ export class UsersModel {
     }
   }
 
-  async deleteUser(id: string): Promise<User> {
+  async deleteUser(id: string): Promise<string> {
     try {
       const conn = await Client.connect();
       const sql = "DELETE FROM users WHERE id=($1)";
       const result = await conn.query(sql, [id]);
       const user = result.rows[0];
       conn.release();
-      return user;
+      return 'User Deleted';
     } catch (err) {
       throw new Error(`Could not delete user ${id}. Error: ${err}`);
     }
@@ -110,7 +110,7 @@ export class UsersModel {
     return null;
   }
 
-  async updatePassword(password: string, id: string): Promise<void> {
+  async updatePassword(password: string, id: string): Promise<string> {
     const hashedPassword = helpers.hashingPass(password);
 
     try {
@@ -119,7 +119,7 @@ export class UsersModel {
       const result = await conn.query(sql, [hashedPassword, id]);
       const user = result.rows[0];
       conn.release();
-      return user;
+      return "Passowrd Updated";
     } catch (err) {
       throw new Error(`Can't update password Error: ${err}`);
     }

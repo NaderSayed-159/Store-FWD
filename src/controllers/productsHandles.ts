@@ -4,7 +4,7 @@ import { accessByToken } from "../middlewares/premissions";
 
 const productsModel = new ProductModel();
 
-const getProducts = async (_req: express.Request, res: express.Response) => {
+const getProducts = async (_req: express.Request, res: express.Response): Promise<void> => {
   try {
     const allProducts = await productsModel.fetchAllProducts();
     res.json(allProducts);
@@ -13,7 +13,7 @@ const getProducts = async (_req: express.Request, res: express.Response) => {
   }
 };
 
-const productById = async (req: express.Request, res: express.Response) => {
+const productById = async (req: express.Request, res: express.Response): Promise<void> => {
   try {
     const product = await productsModel.getProductsById(req.params.id);
     res.json(product);
@@ -23,10 +23,10 @@ const productById = async (req: express.Request, res: express.Response) => {
   }
 };
 
-const createProduct = async (req: express.Request, res: express.Response) => {
+const createProduct = async (req: express.Request, res: express.Response): Promise<void> => {
   const createdProduct: Product = {
-    productName: req.body.productName,
-    productPrice: req.body.productPrice,
+    productname: req.body.productName,
+    productprice: req.body.productPrice,
     category_id: req.body.category_id,
   };
 
@@ -41,7 +41,7 @@ const createProduct = async (req: express.Request, res: express.Response) => {
   }
 };
 
-const updateProduct = async (req: express.Request, res: express.Response) => {
+const updateProduct = async (req: express.Request, res: express.Response): Promise<void> => {
   const productUpdates: [] = req.body;
   try {
     const updatedProduct = await productsModel.updateProduct(
@@ -55,7 +55,7 @@ const updateProduct = async (req: express.Request, res: express.Response) => {
   }
 };
 
-const deleteProduct = async (req: express.Request, res: express.Response) => {
+const deleteProduct = async (req: express.Request, res: express.Response): Promise<void> => {
   try {
     const deletedProduct = await productsModel.deleteProduct(req.params.id);
     res.json(deletedProduct);
@@ -64,7 +64,7 @@ const deleteProduct = async (req: express.Request, res: express.Response) => {
   }
 };
 
-const ProductsRoutes = (app: express.Application) => {
+const ProductsRoutes = (app: express.Application): void => {
   app.get("/products", getProducts);
   app.get("/products/:id", productById);
   app.post("/products", accessByToken, createProduct);

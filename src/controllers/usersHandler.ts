@@ -5,7 +5,7 @@ import { accessByID, accessByToken } from "../middlewares/premissions";
 
 const userModel = new UsersModel();
 
-const getUsers = async (_req: express.Request, res: express.Response) => {
+const getUsers = async (_req: express.Request, res: express.Response): Promise<void> => {
   try {
     const allUsers = await userModel.fetchAllUsers();
     res.json(allUsers);
@@ -14,7 +14,7 @@ const getUsers = async (_req: express.Request, res: express.Response) => {
   }
 };
 
-const userById = async (req: express.Request, res: express.Response) => {
+const userById = async (req: express.Request, res: express.Response): Promise<void> => {
   try {
     const user = await userModel.getUserById(req.params.id);
     res.json(user);
@@ -24,11 +24,11 @@ const userById = async (req: express.Request, res: express.Response) => {
   }
 };
 
-const createUser = async (req: express.Request, res: express.Response) => {
+const createUser = async (req: express.Request, res: express.Response): Promise<void> => {
   const createdUser: User = {
     firstName: req.body.firstName,
     lastName: req.body.lastName,
-    loginName: req.body.loginName,
+    loginname: req.body.loginName,
     password: req.body.password,
   };
 
@@ -43,7 +43,7 @@ const createUser = async (req: express.Request, res: express.Response) => {
   }
 };
 
-const updateUser = async (req: express.Request, res: express.Response) => {
+const updateUser = async (req: express.Request, res: express.Response): Promise<void> => {
   const userUpdates: [] = req.body;
   try {
     const updatedUser = await userModel.updateUser(req.params.id, userUpdates);
@@ -54,7 +54,9 @@ const updateUser = async (req: express.Request, res: express.Response) => {
   }
 };
 
-const deleteUser = async (req: express.Request, res: express.Response) => {
+
+
+const deleteUser = async (req: express.Request, res: express.Response): Promise<void> => {
   try {
     const deletedUser = await userModel.deleteUser(req.params.id);
     res.json(deletedUser);
@@ -63,7 +65,7 @@ const deleteUser = async (req: express.Request, res: express.Response) => {
   }
 };
 
-const authenticate = async (req: express.Request, res: express.Response) => {
+const authenticate = async (req: express.Request, res: express.Response): Promise<void> => {
   const loginedUser = {
     loginName: req.body.loginName,
     password: req.body.password,
@@ -89,7 +91,7 @@ const authenticate = async (req: express.Request, res: express.Response) => {
   }
 };
 
-const updatePass = async (req: express.Request, res: express.Response) => {
+const updatePass = async (req: express.Request, res: express.Response): Promise<void> => {
   try {
     const updatedPass = await userModel.updatePassword(
       req.body.password,
