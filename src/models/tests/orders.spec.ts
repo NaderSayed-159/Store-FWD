@@ -57,7 +57,7 @@ describe("Orders Model defination", () => {
         await userModel.createUser(user);
         await orderModel.createOrder(order);
     });
-    describe("Orders Model endpoints", () => {
+    describe("Orders Model actions", () => {
         it("Fetch all Orders", async () => {
             const products = await orderModel.fetchAllOrders();
             expect(products.length).toBeGreaterThanOrEqual(1);
@@ -134,7 +134,7 @@ describe("Orders Model defination", () => {
                 product_id: 1,
                 quantity: 5
             })
-            const res = await req.get("/orders/3/confirm").set("Authorization", `bearer ${token}`);
+            const res = await req.post("/orders/3/confirm").set("Authorization", `bearer ${token}`);
             expect(res.status).toBe(200);
         })
 
