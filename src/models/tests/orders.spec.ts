@@ -1,10 +1,13 @@
 import { Order, OrderModel } from "../ordersModel";
 import { User, UsersModel } from "../usersModel";
 import Client from "../../database";
-
+import app from "../..";
+import supertest from "supertest";
 const orderModel = new OrderModel;
 const userModel = new UsersModel;
+const req = supertest(app);
 
+const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJmaXJzdG5hbWUiOiJOYWRlciIsImxhc3RuYW1lIjoiU2F5ZWQiLCJsb2dpbm5hbWUiOiJhZG1pbjEifSwiaWF0IjoxNjcxNjEwODMxfQ.s_jpv6lvD9O5tlWym3PzaFVvRLWuNCKpY7rD-otmt3Q"
 
 const order: Order = {
     productsoforder: "1,2",
@@ -42,11 +45,11 @@ describe("Orders Model defination", () => {
             expect(orderModel.getOrdersOfUser).toBeDefined();
         });
     });
+    beforeAll(async () => {
+        await userModel.createUser(user);
+        await orderModel.createOrder(order);
+    });
     describe("Orders Model endpoints", () => {
-        beforeAll(async () => {
-            await userModel.createUser(user);
-            await orderModel.createOrder(order);
-        });
         it("Fetch all Orders", async () => {
             const products = await orderModel.fetchAllOrders();
             expect(products.length).toBeGreaterThanOrEqual(1);
@@ -65,8 +68,59 @@ describe("Orders Model defination", () => {
             const deletedOrder = await orderModel.deleteOrder('2');
             expect(deletedOrder).toEqual("Order Deleted");
         })
+        it('Orders of user', async () => {
+            const userOrders = await orderModel.getOrdersOfUser("1");
+            expect(userOrders.length).toBeGreaterThanOrEqual(1);
+        })
+        it('Order confrirmation', async () => {
+            const confrimedOrder = await orderModel.confirmOrder("1", "1,5", "10,10");
+            expect(confrimedOrder).toEqual("Order confirmed");
+        })
 
     });
+    describe("Orders Routes", () => {
+        it("Get all orders endpoint", async () => {
+            const res = await req.get("/orders").set("Authorization", `bearer ${token}`);
+            expect(res.status).toBe(200);
+        });
+
+        it("Get order by id route ", async () => {
+            const res = await req.get("/orders/1").set("Authorization", `bearer ${token}`);
+            expect(res.status).toBe(200);
+        });
+
+        it("Create orders route", async () => {
+
+            const res = await req.post("/products").send(order).set("Authorization", `bearer ${token}`);
+            expect(res.status).toBe(201);
+        });
+
+        it("update order route ", async () => {
+            const res = await req.put("/orders/1").send([{ "status": "active" }]).set("Authorization", `bearer ${token}`);
+            expect(res.status).toBe(200);
+        });
+
+        it("delete order route", async () => {
+            const res = await req.delete("/orders/3").set("Authorization", `bearer ${token}`);
+            expect(res.status).toBe(200);
+        });
+
+        it('Orders of user route', async () => {
+            const res = await req.get("/users/1/orders").set("Authorization", `bearer ${token}`);
+            expect(res.status).toBe(200);
+        })
+
+        it('Order confrirmation', async () => {
+            await orderModel.createOrder(order);
+            console.log(await orderModel.fetchAllOrders());
+            
+            const res = await req.get("/orders/3/confirm").set("Authorization", `bearer ${token}`);
+
+            // const confrimedOrder = await orderModel.confirmOrder("1", "1,5", "10,10");
+            // expect(confrimedOrder).toEqual("Order confirmed");
+        })
+
+    })
 
     afterAll(async () => {
         const con = await Client.connect();

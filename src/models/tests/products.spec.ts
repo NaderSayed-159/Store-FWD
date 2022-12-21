@@ -62,13 +62,11 @@ describe("Products Model defination", () => {
             const updatedProdcut = await productModel.updateProduct('1', data);
             expect(updatedProdcut).toEqual('Product Updated');
         })
-
         it('product deletion', async () => {
             await productModel.createProduct(product);
             const deletedProduct = await productModel.deleteProduct('2');
             expect(deletedProduct).toEqual("Product Deleted");
         })
-
     });
     describe("Products Routes", () => {
         it("Get all products endpoint", async () => {

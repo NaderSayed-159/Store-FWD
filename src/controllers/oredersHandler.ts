@@ -17,7 +17,8 @@ const getOrders = async (_req: express.Request, res: express.Response) => {
 
 const orderById = async (req: express.Request, res: express.Response) => {
   try {
-    const user = await orderModel.getOrderById(req.params.id);
+    const order = await orderModel.getOrderById(req.params.id);
+    res.json(order)
   } catch (err) {
     res.status(400);
     res.json(`${err}`);
