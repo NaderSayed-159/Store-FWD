@@ -5,7 +5,7 @@ import * as helpers from "../services/helperFunction";
 
 dotenv.config();
 
-const prepper: string = process.env.BCRYPT_PASSWORD as string;
+const prepper = process.env.BCRYPT_PASSWORD as string;
 
 export type User = {
   id?: Number;
@@ -102,8 +102,8 @@ export class UsersModel {
     const sql = "SELECT password FROM users WHERE loginname=($1)";
     const result = await conn.query(sql, [loginName]);
     if (result.rows.length) {
-      const password = result.rows[0];
-      if (bcrypt.compareSync(inputPass + prepper, password.password)) {
+      const hashed = result.rows[0];
+      if (bcrypt.compareSync(`${inputPass}${prepper}`, hashed.password)) {
         const sql2 = "SELECT id ,firstname , lastname , loginname FROM users WHERE loginname=($1)";
         const result2 = await conn.query(sql2, [loginName]);
         return result2.rows[0]

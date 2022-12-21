@@ -6,7 +6,7 @@ import supertest from "supertest";
 
 const userModel = new UsersModel;
 const req = supertest(app);
-const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImZpcnN0bmFtZSI6Ik5hZGVyIiwibGFzdG5hbWUiOiJTYXllZCIsImxvZ2lubmFtZSI6ImFkbWluMSJ9LCJpYXQiOjE2NzE1NzIwMjh9.SJ0gaHqTfIfNbrEOR3hEEKDoC87lHyUyDdgUjFpCwpM"
+const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJmaXJzdG5hbWUiOiJOYWRlciIsImxhc3RuYW1lIjoiU2F5ZWQiLCJsb2dpbm5hbWUiOiJhZG1pbjEifSwiaWF0IjoxNjcxNjEwODMxfQ.s_jpv6lvD9O5tlWym3PzaFVvRLWuNCKpY7rD-otmt3Q"
 const user: User = {
   firstname: "Nader",
   lastName: "Sayed",
@@ -18,7 +18,6 @@ describe("Users Model defination", () => {
   beforeAll(async () => {
     await userModel.createUser(user);
   });
-
   describe("Users Model functions defination", () => {
     it("should have fetchAll", () => {
       expect(userModel.fetchAllUsers).toBeDefined();
@@ -57,25 +56,20 @@ describe("Users Model defination", () => {
       const updatedUser = await userModel.updateUser('1', data);
       expect(updatedUser).toEqual('User Updated');
     })
-
     it('user deletion', async () => {
       await userModel.createUser(user);
       const deletedUser = await userModel.deleteUser('2');
       expect(deletedUser).toEqual('User Deleted');
     })
-
     it('get token authentication', async () => {
       const auth = await userModel.auth(user.loginName, user.password);
       expect(auth?.id).toEqual(1)
     })
-
     it('update Password', async () => {
       const password = await userModel.updatePassword("newPass123$", "1");
       expect(password).toEqual("Password Updated");
     })
   });
-
-
   describe("User Routes", () => {
     it("Get all users endpoint", async () => {
       const res = await req.get("/users").set("Authorization", `bearer ${token}`);
@@ -103,22 +97,23 @@ describe("Users Model defination", () => {
     });
 
     it("delete user route", async () => {
-      await userModel.createUser(user)
       const res = await req.delete("/users/3").set("Authorization", `bearer ${token}`);
       expect(res.status).toBe(200);
     });
 
+    it("update password route", async () => {
+      const res = await req.put("/users/1/password").send({ "password": "Pass123$" }).set("Authorization", `bearer ${token}`);
+      expect(res.status).toBe(200);
+    });
+
     it("auth route", async () => {
-      await userModel.fetchAllUsers();
-      
       const res = await req.post("/users/auth").send({
-        "loginName": "admin",
+        "loginName": user.loginName,
         "password": "Pass123$"
       });
       expect(res.status).toBe(200);
     });
   })
-
   afterAll(async () => {
     const con = await Client.connect();
     const sql =

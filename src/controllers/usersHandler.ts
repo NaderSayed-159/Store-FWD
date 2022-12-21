@@ -54,8 +54,6 @@ const updateUser = async (req: express.Request, res: express.Response): Promise<
   }
 };
 
-
-
 const deleteUser = async (req: express.Request, res: express.Response): Promise<void> => {
   try {
     const deletedUser = await userModel.deleteUser(req.params.id);
@@ -75,6 +73,7 @@ const authenticate = async (req: express.Request, res: express.Response): Promis
       loginedUser.loginName,
       loginedUser.password
     );
+    
     if (authUser != null) {
       const token = jwt.sign(
         { user: authUser },

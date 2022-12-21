@@ -6,7 +6,7 @@ dotenv.config();
 
 export const hashingPass = (password: string) => {
   const hashedPassword = bcrypt.hashSync(
-    (password + process.env.BCRYPT_PASSWORD) as string,
+    (`${password}${process.env.BCRYPT_PASSWORD}`) as string,
     parseInt(process.env.SALT_ROUNDS as string)
   );
 
