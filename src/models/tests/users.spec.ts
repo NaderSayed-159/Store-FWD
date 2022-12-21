@@ -2,10 +2,10 @@ import { UsersModel, User } from "../usersModel";
 import Client from "../../database";
 import app from "../..";
 import supertest from "supertest";
-
-
-const userModel = new UsersModel;
 const req = supertest(app);
+const userModel = new UsersModel;
+
+
 const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJmaXJzdG5hbWUiOiJOYWRlciIsImxhc3RuYW1lIjoiU2F5ZWQiLCJsb2dpbm5hbWUiOiJhZG1pbjEifSwiaWF0IjoxNjcxNjEwODMxfQ.s_jpv6lvD9O5tlWym3PzaFVvRLWuNCKpY7rD-otmt3Q"
 const user: User = {
   firstname: "Nader",

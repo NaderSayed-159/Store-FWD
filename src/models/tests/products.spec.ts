@@ -1,8 +1,14 @@
 import { ProductModel, Product } from "../productsModel";
 import { CategoryModel, Category } from "../productsCategoryModel";
 import Client from "../../database";
+import app from "../..";
+import supertest from "supertest";
+import { UsersModel } from "../usersModel";
+const req = supertest(app);
+
 const productModel = new ProductModel;
 const categoryModel = new CategoryModel;
+const userModel = new UsersModel;
 
 
 const product: Product = {
@@ -10,6 +16,8 @@ const product: Product = {
     productprice: 5,
     category_id: 1
 };
+
+const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJmaXJzdG5hbWUiOiJOYWRlciIsImxhc3RuYW1lIjoiU2F5ZWQiLCJsb2dpbm5hbWUiOiJhZG1pbjEifSwiaWF0IjoxNjcxNjEwODMxfQ.s_jpv6lvD9O5tlWym3PzaFVvRLWuNCKpY7rD-otmt3Q"
 
 describe("Products Model defination", () => {
     describe("Products Model functions defination", () => {
@@ -29,11 +37,18 @@ describe("Products Model defination", () => {
             expect(productModel.updateProduct).toBeDefined();
         });
     });
-    describe("Products Model endpoints", () => {
-        beforeAll(async () => {
-            await categoryModel.createCategory({categoryname:"wooden"});
-            await productModel.createProduct(product);
+    beforeAll(async () => {
+        await categoryModel.createCategory({ categoryname: "wooden" });
+        await productModel.createProduct(product);
+        await userModel.createUser({
+            firstname: "Nader",
+            lastName: "Sayed",
+            loginName: "admin",
+            password: "Pass123$",
         });
+    });
+    describe("Products Model endpoints", () => {
+
         it("Fetch all Products", async () => {
             const products = await productModel.fetchAllProducts();
             expect(products.length).toBeGreaterThanOrEqual(1);
@@ -55,6 +70,37 @@ describe("Products Model defination", () => {
         })
 
     });
+
+    describe("Products Routes", () => {
+        it("Get all products endpoint", async () => {
+            const res = await req.get("/products").set("Authorization", `bearer ${token}`);
+            expect(res.status).toBe(200);
+        });
+        it("Get product by id route ", async () => {
+            const res = await req.get("/products/1").set("Authorization", `bearer ${token}`);
+            expect(res.status).toBe(200);
+        });
+        it("Create products route", async () => {
+
+
+            const newProduct = {
+                productname: "chair",
+                productprice: 5,
+                category_id: 1,
+            }
+
+            const res = await req.post("/products").send(newProduct).set("Authorization", `bearer ${token}`);
+            expect(res.status).toBe(201);
+        });
+        it("update product route ", async () => {
+            const res = await req.put("/products/1").send([{ "productName": "bed" }]).set("Authorization", `bearer ${token}`);
+            expect(res.status).toBe(200);
+        });
+        it("delete product route", async () => {
+            const res = await req.delete("/products/3").set("Authorization", `bearer ${token}`);
+            expect(res.status).toBe(200);
+        });
+    })
 
     afterAll(async () => {
         const con = await Client.connect();

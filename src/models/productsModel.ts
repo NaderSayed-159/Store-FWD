@@ -12,6 +12,7 @@ export type Product = {
 };
 
 export class ProductModel {
+
   async fetchAllProducts(): Promise<Product[]> {
     try {
       const con = await Client.connect();
@@ -77,6 +78,7 @@ export class ProductModel {
       }
     }
   }
+  
   async deleteProduct(id: string): Promise<string> {
     try {
       const conn = await Client.connect();
