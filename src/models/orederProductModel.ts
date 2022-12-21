@@ -33,9 +33,9 @@ export class OrderProductModel {
         additionInput.product_id,
         additionInput.quantity,
       ]);
-      const user = result.rows[0];
+      const products = result.rows[0];
       conn.release();
-      return user;
+      return products;
     } catch (err) {
       throw new Error(`Could not add record Error: ${err}`);
     }
@@ -93,7 +93,7 @@ export class OrderProductModel {
       const sql =
         "UPDATE products_orders SET quantity=($1) WHERE order_id=($2) AND product_id=($3)";
       const result = await con.query(sql, [quantity, order_id, product_id]);
-      return result.rows[0];
+      return "Product updated";
     } catch (err) {
       throw new Error(`${err}`);
     }
@@ -105,7 +105,7 @@ export class OrderProductModel {
       const sql =
         "DELETE FROM products_orders WHERE order_id=($1) AND product_id=($2)";
       const result = await con.query(sql, [order_id, product_id]);
-      return result.rows[0];
+      return "removed from the cart"
     } catch (err) {
       throw new Error(`${err}`);
     }

@@ -118,8 +118,7 @@ describe("Orders Model defination", () => {
             expect(res.status).toBe(200);
         })
 
-        it('Order confrirmation', async () => {
-
+        it('Order confirrmation route', async () => {
             await categoryModel.createCategory({
                 categoryname: "metal"
             })
