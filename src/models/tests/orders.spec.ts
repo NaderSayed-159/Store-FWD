@@ -3,8 +3,16 @@ import { User, UsersModel } from "../usersModel";
 import Client from "../../database";
 import app from "../..";
 import supertest from "supertest";
+import { OrderProductModel } from "../orederProductModel";
+import { ProductModel } from "../productsModel";
+import { CategoryModel } from "../productsCategoryModel";
 const orderModel = new OrderModel;
 const userModel = new UsersModel;
+const orderProductModel = new OrderProductModel;
+const productModel = new ProductModel;
+const categoryModel = new CategoryModel;
+
+
 const req = supertest(app);
 
 const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJmaXJzdG5hbWUiOiJOYWRlciIsImxhc3RuYW1lIjoiU2F5ZWQiLCJsb2dpbm5hbWUiOiJhZG1pbjEifSwiaWF0IjoxNjcxNjEwODMxfQ.s_jpv6lvD9O5tlWym3PzaFVvRLWuNCKpY7rD-otmt3Q"
@@ -111,13 +119,23 @@ describe("Orders Model defination", () => {
         })
 
         it('Order confrirmation', async () => {
-            await orderModel.createOrder(order);
-            console.log(await orderModel.fetchAllOrders());
-            
-            const res = await req.get("/orders/3/confirm").set("Authorization", `bearer ${token}`);
 
-            // const confrimedOrder = await orderModel.confirmOrder("1", "1,5", "10,10");
-            // expect(confrimedOrder).toEqual("Order confirmed");
+            await categoryModel.createCategory({
+                categoryname: "metal"
+            })
+            await orderModel.createOrder(order)
+            await productModel.createProduct({
+                productname: "chair",
+                productprice: 5,
+                category_id: 1
+            })
+            await orderProductModel.addProductToCart({
+                order_id:3,
+                product_id: 1,
+                quantity: 5
+            })
+            const res = await req.get("/orders/3/confirm").set("Authorization", `bearer ${token}`);
+            expect(res.status).toBe(200);
         })
 
     })
