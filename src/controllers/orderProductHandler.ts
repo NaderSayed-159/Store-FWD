@@ -30,7 +30,7 @@ const addProductToCart = async (
     const activeOrder = await orderProductModel.AcitveOrderOfUser(
       decodedTokenUser
     );
-    if (activeOrder.status == "active") {
+    if (activeOrder.status == "active") {      
       const productCheck = await orderProductModel.checkProductInCart(
         activeOrder.rows.id,
         req.body.product_id
@@ -75,6 +75,8 @@ const addProductToCart = async (
     res.json(`${err}`);
   }
 };
+
+
 
 const deleteCartProduct = async (
   req: express.Request,

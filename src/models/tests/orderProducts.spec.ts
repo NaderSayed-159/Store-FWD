@@ -104,6 +104,23 @@ describe("Orders Products Model defination", () => {
         })
     })
 
+    describe('Orders PRoducts routes', () => {
+        it("products of order route", async () => {
+            const res = await req.get("/orders/1/products").set("Authorization", `bearer ${token}`);
+            expect(res.status).toBe(200);
+        })
+        it("add product to cart route", async () => {            
+            const res = await req.post("/orders/products").send({ order_id: 1, product_id: "2", quantity: 5 }).set("Authorization", `bearer ${token}`);
+            expect(res.status).toBe(200);
+        })
+        
+        it("remove product from cart", async () => {
+            const res = await req.delete("/orders/1/products/2").set("Authorization", `bearer ${token}`);
+            expect(res.status).toBe(200);
+        })
+        
+    })
+
     afterAll(async () => {
         const con = await Client.connect();
         const sql =
