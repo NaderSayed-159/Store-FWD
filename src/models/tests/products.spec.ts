@@ -47,7 +47,7 @@ describe("Products Model defination", () => {
             password: "Pass123$",
         });
     });
-    describe("Products Model endpoints", () => {
+    describe("Products Model Action", () => {
 
         it("Fetch all Products", async () => {
             const products = await productModel.fetchAllProducts();
@@ -70,7 +70,6 @@ describe("Products Model defination", () => {
         })
 
     });
-
     describe("Products Routes", () => {
         it("Get all products endpoint", async () => {
             const res = await req.get("/products").set("Authorization", `bearer ${token}`);
