@@ -9,8 +9,56 @@ These are the notes from a meeting with the frontend developer that describe wha
 #### Users
 
 - Index [token required]
+  * HTTP method : GET
+  * route : ' /users '
 - Show [token required]
-- Create N[token required]
+  * HTTP method : GET
+  * route : ' /users/:id
+- Create [token required]
+  * HTTP method : POST
+  * route : ' /users '
+  * request Ex:
+
+    ```json
+    {
+    "firstname":"Nader",
+    "lastName": "Saysd",
+    "loginName" : "admin",
+    "password" : "Pass123$"
+    }
+    ```
+
+* Update User
+  * HTTP method : PUT
+  * route : '/users/:id'
+  * request EX:
+  * ```json
+    [
+    {"lastName":"Bauomi"},
+    ]
+    ```
+* Delete User
+  * HTTP method : Delete
+  * route : '/users/:id'
+* Auhenticate User
+  * HTTP method : POST
+  * route : '/users/auth'
+  * request Ex:
+    ```json
+    {
+     "loginName": "admin",
+      "password": "Pass123$"
+    }
+    ```
+* Update password
+  * HTTP method : POST
+  * route : '/users/:id/password'
+  * request Ex:
+  * ```json
+    {
+    "password": "newPass"
+    }
+    ```
 
 #### Products
 
