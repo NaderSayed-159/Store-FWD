@@ -33,13 +33,23 @@ you can assign values to which has stars value debends on your environment
 
 **you can start the the server by command:**
 
-install npm packages using 
+**install npm packages using**
 
-'npm i'
+```plaintext
+npm i
+```
 
 **To run the application you can use script**
 
-' npm run dev ';
+```plaintext
+npm run dev
+```
+
+**To run the application tests** 
+
+```plaintext
+npm run test
+```
 
 the application will run on route' http://localhost:3000 '
 
