@@ -45,7 +45,7 @@ npm i
 npm run dev
 ```
 
-**To run the application tests** 
+**To run the application tests**
 
 ```plaintext
 npm run test
@@ -53,15 +53,63 @@ npm run test
 
 the application will run on route' http://localhost:3000 '
 
-## Users Model
+## Features
 
-then you can do all request on '**http://localhost:3000/users**'
+* you can create the 1st user without token but the 2nd one you will need to login and get the token to do anything
+* to do any action needs token you need at least one user you will be warned if there is no users but if there will warned that you need auth
+* add product to cart will check automatically the active order of the logined user and use its id to add product to cart
+* if no active orders will create a new order with active statu
+* to close the order you can use confirm route to convert its statu from active to completed and collect order products and its quantites from cart tabel and update order record in order table
+* some actions needs that the logined user has the same id of the action requirments for example you can't get the orders of another user just you can get your orders
+* updating password can't be done using updating user route it has its own route and it will encrypted too
+* if you add the same product to cart in diffrent request it will check if there is same product in same order id will update the record in cart by adding the old quantity with new quantity
 
-* to get all users use [ **Get** ] verb on above route
-* to get user by id use [ **Get** ] verb on  route ' http://localhost:3000/users/userid '
-* to create user by [ **POST** ] verb on above route
-* to update use [ **PUT** ] verb with mentiond JSON structure below;
-* to delete user by [ **DELETE** ] verb ' **http://localhost:3000/users/userid '**
+## Work Cycle 
+
+- **Using [ POST ] verb on below routes**
+
+* Create new user '/users'
+
+  ```json
+  {
+  "firstname":"Nader",
+  "lastName": "Saysd",
+  "loginName" : "admin",
+  "password" : "Pass123$"
+  }
+  ```
+* Login using auth route '/users/auth'
+
+  ```json
+  {
+   "loginName": "admin",
+    "password": "Pass123$"
+  }
+  ```
+* Create product Category '/products/categories'
+
+  ```json
+  {
+  categoryName:"Metal"
+  }
+  ```
+* Create new product '/products'
+
+  ```json
+  {
+  "productname":"chair",
+  "productprice":5,
+  category_id:1
+  }
+  ```
+* Use add product to cart route ( new order automatically) '/orders/products'
+
+  ```json
+  {
+  "product_id":1,
+  "quantity":5
+  }
+  ```
 
 ## JWT token of login
 
@@ -75,26 +123,6 @@ You can can call 'http://localhost:3000/users/auth' by [ **POST** ] request with
 ```
 
 after copying token form response put it in header actions that need authentications as authoriztion key and in value put "bearer Token"
-
-## Orders Model
-
-all request on '**http://localhost:3000/orders**'
-
-* to get all users use [ **Get** ] verb on above route
-* to get user by id use [ **Get** ] verb on  route ' **http://localhost:3000/orders/userid** '
-* to create user by [ **POST** ] verb on above route
-* to update use [ **PUT** ] verb with mentiond JSON structure below;
-* to delete user by [ **DELETE** ] verb ' **http://localhost:3000/orders/orderid '**
-
-## Products Model
-
-all request on '**http://localhost:3000/products**'
-
-* to get all users use [ **Get** ] verb on above route
-* to get user by id use [ **Get** ] verb on  route ' **http://localhost:3000/products/productid** '
-* to create user by [ **POST** ] verb on above route
-* to update use [ **PUT** ] verb with mentiond JSON structure below;
-* to delete user by [ **DELETE** ] verb ' **http://localhost:3000/products/productid '**
 
 ## For any update request in any model
 

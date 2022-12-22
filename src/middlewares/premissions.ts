@@ -16,9 +16,7 @@ export const accessByID = (
       token as string,
       process.env.JWT_STRING as string
     ) as JwtPayload;
-    // console.log('decoded', decoded)
-    // console.log('decoded.user.id', decoded.user.id)
-    // console.log('req.params.id', req.params.id)
+
     if (decoded.user.id != parseInt(req.params.id)) {
       throw new Error();
     }
