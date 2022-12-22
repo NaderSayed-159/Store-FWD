@@ -4,7 +4,10 @@ import { accessByToken } from "../middlewares/premissions";
 
 const productsModel = new ProductModel();
 
-const getProducts = async (_req: express.Request, res: express.Response): Promise<void> => {
+const getProducts = async (
+  _req: express.Request,
+  res: express.Response
+): Promise<void> => {
   try {
     const allProducts = await productsModel.fetchAllProducts();
     res.json(allProducts);
@@ -13,7 +16,10 @@ const getProducts = async (_req: express.Request, res: express.Response): Promis
   }
 };
 
-const productById = async (req: express.Request, res: express.Response): Promise<void> => {
+const productById = async (
+  req: express.Request,
+  res: express.Response
+): Promise<void> => {
   try {
     const product = await productsModel.getProductsById(req.params.id);
     res.json(product);
@@ -23,7 +29,10 @@ const productById = async (req: express.Request, res: express.Response): Promise
   }
 };
 
-const createProduct = async (req: express.Request, res: express.Response): Promise<void> => {
+const createProduct = async (
+  req: express.Request,
+  res: express.Response
+): Promise<void> => {
   const createdProduct: Product = {
     productname: req.body.productName,
     productprice: req.body.productPrice,
@@ -41,7 +50,10 @@ const createProduct = async (req: express.Request, res: express.Response): Promi
   }
 };
 
-const updateProduct = async (req: express.Request, res: express.Response): Promise<void> => {
+const updateProduct = async (
+  req: express.Request,
+  res: express.Response
+): Promise<void> => {
   const productUpdates: [] = req.body;
   try {
     const updatedProduct = await productsModel.updateProduct(
@@ -55,7 +67,10 @@ const updateProduct = async (req: express.Request, res: express.Response): Promi
   }
 };
 
-const deleteProduct = async (req: express.Request, res: express.Response): Promise<void> => {
+const deleteProduct = async (
+  req: express.Request,
+  res: express.Response
+): Promise<void> => {
   try {
     const deletedProduct = await productsModel.deleteProduct(req.params.id);
     res.json(deletedProduct);

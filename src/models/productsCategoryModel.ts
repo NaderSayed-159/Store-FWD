@@ -61,7 +61,7 @@ export class CategoryModel {
       const result = await conn.query(sql);
       const category = result.rows[0];
       conn.release();
-      return 'Category Updated';
+      return "Category Updated";
     } catch (err) {
       if (data.length == 0) {
         throw new Error(`Updates can't be empty`);
@@ -70,6 +70,7 @@ export class CategoryModel {
       }
     }
   }
+
   async deleteCategory(id: string): Promise<string> {
     try {
       const conn = await Client.connect();
@@ -77,7 +78,7 @@ export class CategoryModel {
       const result = await conn.query(sql, [id]);
       const category = result.rows[0];
       conn.release();
-      return 'Category Deleted';
+      return "Category Deleted";
     } catch (err) {
       throw new Error(`Could not delete Category ${id}. Error: ${err}`);
     }

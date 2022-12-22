@@ -74,7 +74,7 @@ export class UsersModel {
       const result = await conn.query(sql);
       const user = result.rows[0];
       conn.release();
-      return 'User Updated';
+      return "User Updated";
     } catch (err) {
       if (data.length == 0) {
         throw new Error(`Updates can't be empty`);
@@ -91,7 +91,7 @@ export class UsersModel {
       const result = await conn.query(sql, [id]);
       const user = result.rows[0];
       conn.release();
-      return 'User Deleted';
+      return "User Deleted";
     } catch (err) {
       throw new Error(`Could not delete user ${id}. Error: ${err}`);
     }
@@ -104,9 +104,10 @@ export class UsersModel {
     if (result.rows.length) {
       const hashed = result.rows[0];
       if (bcrypt.compareSync(`${inputPass}${prepper}`, hashed.password)) {
-        const sql2 = "SELECT id ,firstname , lastname , loginname FROM users WHERE loginname=($1)";
+        const sql2 =
+          "SELECT id ,firstname , lastname , loginname FROM users WHERE loginname=($1)";
         const result2 = await conn.query(sql2, [loginName]);
-        return result2.rows[0]
+        return result2.rows[0];
       }
     }
     return null;

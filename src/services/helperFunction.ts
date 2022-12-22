@@ -1,12 +1,12 @@
 import bcrypt from "bcrypt";
 import dotenv from "dotenv";
-import { AddedProduct } from "../models/orederProductModel";
+import { AddedProduct } from "../models/orderProductModel";
 
 dotenv.config();
 
 export const hashingPass = (password: string) => {
   const hashedPassword = bcrypt.hashSync(
-    (`${password}${process.env.BCRYPT_PASSWORD}`) as string,
+    `${password}${process.env.BCRYPT_PASSWORD}` as string,
     parseInt(process.env.SALT_ROUNDS as string)
   );
 

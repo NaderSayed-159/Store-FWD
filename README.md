@@ -2,16 +2,18 @@
 
 #### Environment Variables:
 
-* POSTGRES_HOST = '127.0.0.1'
+* POSTGRES_HOST =*******
 * POSTGRES_DB = 'STORE_FWD'
-* POSTGRES_USER = 'postgres'
-* POSTGRES_PASSWORD = 'Pass123$'
+* POSTGRES_USER = "postgres"
+* POSTGRES_PASSWORD = "Pass123$"
 * POSTGRES_TEST_DB='testDb'
 * NODE_ENV = 'dev'
 * PORT = 3000
-* BCRYPT_PASSWORD = 'Pass-X'
+* BCRYPT_PASSWORD =******
 * SALT_ROUNDS = 10
-* JWT_STRING='KiritoX'
+* JWT_STRING=******
+
+you can assign values to which has stars value debends on your environment
 
 #### Database Setub
 
@@ -19,11 +21,23 @@
 
 2- CREATE DATABASE testDb;
 
-> i used the default user of server "postgres"
+- Create user
+  1- CREATE USER postgres  WITH PASSWORD 'Pass123$'
 
-After running migrations to create the tables
+  - Grante privileges on both databases
+    2- GRANT ALL PRIVILEGES ON DATABASE STORE_FWD TO postgres
+
+    3-GRANT ALL PRIVILEGES ON DATABASE testdb TO postgres;
+
+> After running migrations to create the tables
 
 **you can start the the server by command:**
+
+install npm packages using 
+
+'npm i'
+
+**To run the application you can use script**
 
 ' npm run dev ';
 

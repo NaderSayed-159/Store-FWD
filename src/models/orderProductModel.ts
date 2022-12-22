@@ -1,6 +1,5 @@
 import Client from "../database";
 import dotenv from "dotenv";
-
 dotenv.config();
 
 export type AddedProduct = {
@@ -55,6 +54,7 @@ export class OrderProductModel {
       } else {
         return {
           status: "no-active",
+          rows: result.rows[0],
         };
       }
     } catch (err) {
@@ -87,7 +87,7 @@ export class OrderProductModel {
     quantity: number,
     order_id: string,
     product_id: string
-  ) {
+  ): Promise<string> {
     try {
       const con = await Client.connect();
       const sql =
@@ -99,13 +99,16 @@ export class OrderProductModel {
     }
   }
 
-  async deleteCartProduct(order_id: string, product_id: string) {
+  async deleteCartProduct(
+    order_id: string,
+    product_id: string
+  ): Promise<string> {
     try {
       const con = await Client.connect();
       const sql =
         "DELETE FROM products_orders WHERE order_id=($1) AND product_id=($2)";
       const result = await con.query(sql, [order_id, product_id]);
-      return "removed from the cart"
+      return "removed from the cart";
     } catch (err) {
       throw new Error(`${err}`);
     }

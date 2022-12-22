@@ -4,7 +4,10 @@ import { Category, CategoryModel } from "../models/productsCategoryModel";
 
 const productCategoryModel = new CategoryModel();
 
-const getCategories = async (_req: express.Request, res: express.Response): Promise<void> => {
+const getCategories = async (
+  _req: express.Request,
+  res: express.Response
+): Promise<void> => {
   try {
     const allCategories = await productCategoryModel.fetchAllCategories();
     res.json(allCategories);
@@ -13,7 +16,10 @@ const getCategories = async (_req: express.Request, res: express.Response): Prom
   }
 };
 
-const categoryById = async (req: express.Request, res: express.Response): Promise<void> => {
+const categoryById = async (
+  req: express.Request,
+  res: express.Response
+): Promise<void> => {
   try {
     const category = await productCategoryModel.getCategoriesById(
       req.params.id
@@ -25,7 +31,10 @@ const categoryById = async (req: express.Request, res: express.Response): Promis
   }
 };
 
-const createCategory = async (req: express.Request, res: express.Response): Promise<void> => {
+const createCategory = async (
+  req: express.Request,
+  res: express.Response
+): Promise<void> => {
   const createdCategory: Category = {
     categoryname: req.body.categoryName,
   };
@@ -43,7 +52,10 @@ const createCategory = async (req: express.Request, res: express.Response): Prom
   }
 };
 
-const updateCategory = async (req: express.Request, res: express.Response): Promise<void> => {
+const updateCategory = async (
+  req: express.Request,
+  res: express.Response
+): Promise<void> => {
   const categoryUpdates: [] = req.body;
   try {
     const updatedCategory = await productCategoryModel.updateCategory(
@@ -57,7 +69,10 @@ const updateCategory = async (req: express.Request, res: express.Response): Prom
   }
 };
 
-const deleteCategory = async (req: express.Request, res: express.Response): Promise<void> => {
+const deleteCategory = async (
+  req: express.Request,
+  res: express.Response
+): Promise<void> => {
   try {
     const deletedCategory = await productCategoryModel.deleteCategory(
       req.params.id

@@ -68,7 +68,7 @@ export class OrderModel {
       const result = await conn.query(sql);
       const order = result.rows[0];
       conn.release();
-      return 'Order Updated';
+      return "Order Updated";
     } catch (err) {
       if (data.length == 0) {
         throw new Error(`Updates can't be empty`);
@@ -85,7 +85,7 @@ export class OrderModel {
       const result = await conn.query(sql, [id]);
       const order = result.rows[0];
       conn.release();
-      return 'Order Deleted';
+      return "Order Deleted";
     } catch (err) {
       throw new Error(`Could not delete order ${id}. Error: ${err}`);
     }
@@ -117,7 +117,7 @@ export class OrderModel {
       const con = await Client.connect();
       const sql = helpers.generteUpdateQuerey(data as [], "orders", order_id);
       const result = await con.query(sql);
-      return 'Order confirmed';
+      return "Order confirmed";
     } catch (err) {
       throw new Error(`${err}`);
     }

@@ -1,15 +1,15 @@
 import express from "express";
-import { OrderProductModel, AddedProduct } from "../models/orederProductModel";
+import { OrderProductModel, AddedProduct } from "../models/orderProductModel";
 import { tokenUserID, accessByToken } from "../middlewares/premissions";
 import { Order, OrderModel } from "../models/ordersModel";
 
-const orderProductModel = new OrderProductModel;
-const orderModel = new OrderModel;
+const orderProductModel = new OrderProductModel();
+const orderModel = new OrderModel();
 
 const getProductsOfOrder = async (
   req: express.Request,
   res: express.Response
-) => {
+): Promise<void> => {
   try {
     const products = await orderProductModel.fetchAllProductsbyOrder(
       req.params.id
@@ -24,13 +24,13 @@ const getProductsOfOrder = async (
 const addProductToCart = async (
   req: express.Request,
   res: express.Response
-) => {
+): Promise<void> => {
   try {
     const decodedTokenUser = tokenUserID(req);
     const activeOrder = await orderProductModel.AcitveOrderOfUser(
       decodedTokenUser
     );
-    if (activeOrder.status == "active") {      
+    if (activeOrder.status == "active") {
       const productCheck = await orderProductModel.checkProductInCart(
         activeOrder.rows.id,
         req.body.product_id
@@ -76,12 +76,10 @@ const addProductToCart = async (
   }
 };
 
-
-
 const deleteCartProduct = async (
   req: express.Request,
   res: express.Response
-) => {
+): Promise<void> => {
   try {
     const order = await orderModel.getOrderById(req.params.order_id);
     if (order.status == "completed") {
@@ -97,7 +95,7 @@ const deleteCartProduct = async (
   }
 };
 
-const OrdersProductsRoutes = (app: express.Application) => {
+const OrdersProductsRoutes = (app: express.Application): void => {
   app.get("/orders/:id/products", accessByToken, getProductsOfOrder);
   app.post("/orders/products", accessByToken, addProductToCart);
   app.delete(

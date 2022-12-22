@@ -1,12 +1,15 @@
 import { Order, OrderModel } from "../models/ordersModel";
 import express from "express";
 import { accessByToken, accessByID } from "../middlewares/premissions";
-import { OrderProductModel } from "../models/orederProductModel";
+import { OrderProductModel } from "../models/orderProductModel";
 import { getDetailsString } from "../services/helperFunction";
-const orderModel = new OrderModel;
-const orderProductModel = new OrderProductModel;
+const orderModel = new OrderModel();
+const orderProductModel = new OrderProductModel();
 
-const getOrders = async (_req: express.Request, res: express.Response) => {
+const getOrders = async (
+  _req: express.Request,
+  res: express.Response
+): Promise<void> => {
   try {
     const allUsers = await orderModel.fetchAllOrders();
     res.json(allUsers);
@@ -15,17 +18,23 @@ const getOrders = async (_req: express.Request, res: express.Response) => {
   }
 };
 
-const orderById = async (req: express.Request, res: express.Response) => {
+const orderById = async (
+  req: express.Request,
+  res: express.Response
+): Promise<void> => {
   try {
     const order = await orderModel.getOrderById(req.params.id);
-    res.json(order)
+    res.json(order);
   } catch (err) {
     res.status(400);
     res.json(`${err}`);
   }
 };
 
-const createOrder = async (req: express.Request, res: express.Response) => {
+const createOrder = async (
+  req: express.Request,
+  res: express.Response
+): Promise<void> => {
   const createdProduct: Order = {
     productsoforder: req.body.productsoforder,
     quantitiesofproducts: req.body.quantitiesofproducts,
@@ -44,7 +53,10 @@ const createOrder = async (req: express.Request, res: express.Response) => {
   }
 };
 
-const updateOrder = async (req: express.Request, res: express.Response) => {
+const updateOrder = async (
+  req: express.Request,
+  res: express.Response
+): Promise<void> => {
   const userUpdates: [] = req.body;
   try {
     const updatedUser = await orderModel.updateOrder(
@@ -58,7 +70,10 @@ const updateOrder = async (req: express.Request, res: express.Response) => {
   }
 };
 
-const deleteOrder = async (req: express.Request, res: express.Response) => {
+const deleteOrder = async (
+  req: express.Request,
+  res: express.Response
+): Promise<void> => {
   try {
     const deletedProduct = await orderModel.deleteOrder(req.params.id);
     res.json(deletedProduct);
@@ -67,7 +82,10 @@ const deleteOrder = async (req: express.Request, res: express.Response) => {
   }
 };
 
-const OrdersByUser = async (req: express.Request, res: express.Response) => {
+const OrdersByUser = async (
+  req: express.Request,
+  res: express.Response
+): Promise<void> => {
   try {
     const ordersOfUser = await orderModel.getOrdersOfUser(req.params.id);
     res.json(ordersOfUser);
@@ -75,7 +93,10 @@ const OrdersByUser = async (req: express.Request, res: express.Response) => {
     res.json(err);
   }
 };
-const cofirmOrder = async (req: express.Request, res: express.Response) => {
+const cofirmOrder = async (
+  req: express.Request,
+  res: express.Response
+): Promise<void> => {
   try {
     const orderProducts = await orderProductModel.fetchAllProductsbyOrder(
       req.params.id
@@ -94,7 +115,7 @@ const cofirmOrder = async (req: express.Request, res: express.Response) => {
   }
 };
 
-const OrdersRoutes = (app: express.Application) => {
+const OrdersRoutes = (app: express.Application): void => {
   app.get("/orders", getOrders);
   app.get("/orders/:id", orderById);
   app.post("/orders", accessByToken, createOrder);
@@ -102,7 +123,6 @@ const OrdersRoutes = (app: express.Application) => {
   app.delete("/orders/:id", accessByToken, deleteOrder);
   app.get("/users/:id/orders", accessByID, OrdersByUser);
   app.post("/orders/:id/confirm", accessByToken, cofirmOrder);
-
 };
 
 export default OrdersRoutes;
